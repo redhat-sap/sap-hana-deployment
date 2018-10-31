@@ -1,0 +1,113 @@
+
+[Server]
+
+# Executes checks, does not install SAP HANA System ( Default: n )
+check_only={{ item.value.hana_check_only | default('n') }}
+
+# Remote Execution ( Default: ssh; Valid values: ssh | saphostagent )
+remote_execution={{ item.value.hana_remote_execution | default('saphostagent') }}
+
+# Enable the installation or upgrade of the SAP Host Agent ( Default: n )
+install_hostagent={{ item.value.hana_install_hostagent | default('y') }}
+
+# Local Host Name ( Default: hostname  )
+hostname={{ item.value.hana_instance_hostname }}
+
+# Additional Hosts
+addhosts={{ item.value.hana_addhosts | default('') }}
+
+# Non-standard Shared File System
+checkmnt={{ item.value.hana_checkmnt | default('') }}
+
+# Installation Path ( Default: /hana/shared )
+sapmnt={{ item.value.hana_sapmnt | default('/hana/shared') }}
+
+# Install SSH Key ( Default: y )
+install_ssh_key={{ item.value.hana_install_ssh_key | default('y') }}
+
+# Root User Name ( Default: root )
+root_user={{ item.value.hana_root_user | default('root') }}
+
+# Root User Password
+root_password={{ item.value.hana_root_user | default('') }}
+
+
+# SAP Host Agent User (sapadm) Password
+sapadm_password={{ pw_user_sapadm_clear }}
+
+# SAP HANA System ID
+sid={{ item.value.hana_sid|upper }}
+
+# Instance Number ( Valid values: 00 | 01 | 02 | 03 | 04 | 05 | 06 | 07 | 08 | 09 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | 32 | 33 | 34 | 35 | 36 | 37 | 38 | 39 | 40 | 41 | 42 | 43 | 44 | 45 | 46 | 47 | 48 | 49 | 50 | 51 | 52 | 53 | 54 | 55 | 56 | 57 | 58 | 59 | 60 | 61 | 62 | 63 | 64 | 65 | 66 | 67 | 68 | 69 | 70 | 71 | 72 | 73 | 74 | 75 | 76 | 77 | 78 | 79 | 80 | 81 | 82 | 83 | 84 | 85 | 86 | 87 | 88 | 89 | 90 | 91 | 92 | 93 | 94 | 95 | 96 | 97 )
+number={{ item.value.hana_instance_number }}
+
+# Database Mode ( Default: single_container; Valid values: single_container | multiple_containers )
+db_mode={{ item.value.hana_db_mode | default('multiple_containers') }}
+
+# Database Isolation ( Default: low; Valid values: low | high )
+db_isolation={{ item.value.hana_db_isolation | default('low') }}
+
+# System Usage ( Default: custom; Valid values: production | test | development | custom )
+system_usage={{ item.value.hana_system_usage }}
+
+# System Administrator Password
+password={{ item.value.pw_user_sidadm }}
+
+# System Administrator Home Directory ( Default: /usr/sap/${sid}/home )
+home={{ item.value.hana_home | default('/usr/sap/${sid}/home') }}
+
+# System Administrator User ID
+userid={{ item.value.id_user_sidadm }}
+
+# System Administrator Login Shell ( Default: /bin/sh )
+shell={{ item.value.hana_shell | default('/bin/sh') }}
+
+# ID of User Group (sapsys)
+groupid={{ id_group_sapsys }}
+
+# Directory containing a storage configuration
+storage_cfg={{ item.value.hana_storage_cfg | default('') }}
+
+# Internal Network Address
+internal_network={{ item.value.hana_internal_network | default('') }} 
+
+# Location of Data Volumes ( Default: ${sapmnt}/${sid}/global/hdb/data )
+# datapath=${sapmnt}/${sid}/global/hdb/data
+# datapath=/hana/data/${sid}
+
+# Location of Log Volumes ( Default: ${sapmnt}/${sid}/global/hdb/log )
+# logpath=${sapmnt}/${sid}/global/hdb/log
+logpath={{ item.value.hana_logpath | default ('/hana/log/${sid}') }}
+
+# Directory containing custom configurations
+custom_cfg={{ item.value.hana_custom_cfg | default('') }}
+
+# Change the initial SSFS key ( Default: y )
+change_initial_ssfs_key=y
+
+# Restrict maximum memory allocation?
+restrict_max_mem={{ item.value.restrict_max_mem | default ('') }}
+
+# Maximum Memory Allocation in MB
+max_mem={{ item.value.max_mem | default ('') }}
+
+# Database User (SYSTEM) Password
+system_user_password={{ item.value.hana_pw_system_user_clear }}
+
+# Restart system after machine reboot? ( Default: n )
+autostart={{ item.value.hana_autostart | default('n') }}
+
+# Inter Service Communication Mode ( Valid values: standard | ssl )
+isc_mode={{ item.value.hana_isc_mode | default('') }}
+
+# Enable XS Engine ( Default: y )
+xs_engine={{ item.value.hana_xs_engine | default('y') }}
+
+# XS Engine HTTP Port
+xs_engine_http_port={{ item.value.hana_xs_engine_http_port | default('') }}
+
+# XS Engine HTTPS Port
+xs_engine_https_port={{ item.value.hana_xs_engine_https_port | default('') }}
+
+# Imports delivery units ( Default: y )
+import_content={{ item.value.hana_import_content | default('y') }}

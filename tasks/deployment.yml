@@ -53,7 +53,7 @@
     password: "{{ item.value.pw_user_sidadm|password_hash('sha512') }}"
   with_dict: "{{ instances }}"
 
-# Check what is already installes
+# Check what is already installed
 - name: get installed SAP instances
   shell: |
     # return nothing if uninstalled (rc=127) or not running (rc=1)
@@ -62,7 +62,7 @@
     if /usr/sap/hostctrl/exe/saphostctrl -function Ping > /dev/null 2>&1; then
        echo " - - -"
     else
-       /usr/sap/hostctrl/exe/saphostctrl -function ListInstancesi | cut -d":" -f2-
+       /usr/sap/hostctrl/exe/saphostctrl -function ListInstances | cut -d":" -f2-
     fi 
   register: sap_hana_deployment_register_instancelist 
   changed_when: false

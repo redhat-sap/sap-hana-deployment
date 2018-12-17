@@ -13,31 +13,33 @@
   template: src=deployment_hana_inst_SID.cfg.j2 dest=/tmp/hana_install_{{ item.value.hana_sid|lower}}.cfg
   with_dict: "{{ instances }}"
 
+
+# TODO: HANA directorys via variables
 - name: create usr sap directory
   file:
     path: "/usr/sap/{{ item.value.hana_sid|upper }}"
     state: directory
   with_dict: "{{ instances }}"
 
-- name: create hana shared directory
+- name: ensure hana shared directory exists
   file:
     path: "/hana/shared/{{ item.value.hana_sid|upper }}"
     state: directory
   with_dict: "{{ instances }}"
 
-- name: create hana data directory
+- name: ensure hana data directory exists
   file:
     path: "/hana/data/{{ item.value.hana_sid|upper }}"
     state: directory
   with_dict: "{{ instances }}"
 
-- name: create hana log directory
+- name: ensure hana log directory exists
   file:
     path: "/hana/log/{{ item.value.hana_sid|upper }}"
     state: directory
   with_dict: "{{ instances }}"
 
-- name: create sap sid group
+- name: ensure sap sid group
   group: name={{ item.value.hana_sid|lower }}shm gid={{ item.value.id_group_shm }}
   with_dict: "{{ instances }}"
 
@@ -50,6 +52,26 @@
     home: "/usr/sap/{{ item.value.hana_sid|upper }}/home"
     password: "{{ item.value.pw_user_sidadm|password_hash('sha512') }}"
   with_dict: "{{ instances }}"
+
+# Check what is already installes
+- name: get installed SAP instances
+  shell: |
+    # return nothing if uninstalled (rc=127) or not running (rc=1)
+    # example output:
+    # Inst Info : RH1 - 10 - hana1-repl - 749, patch 418, changelist 1816226
+    if /usr/sap/hostctrl/exe/saphostctrl -function Ping > /dev/null 2>&1; then
+       echo " - - -"
+    else
+       /usr/sap/hostctrl/exe/saphostctrl -function ListInstancesi | cut -d":" -f2-
+    fi 
+  register: sap_hana_deployment_register_instancelist 
+  changed_when: false
+
+- name: debug found instances
+  debug:
+    var: sap_hana_deployment_register_instancelist.stdout
+
+### TODO: Only install when Instance or SID not installed
 
 # 20170513 Thomas Bludau
 # Very complicated part. Could be different on every enviornment.
@@ -70,11 +92,11 @@
 - name: execute unattended installation (logfile /var/log/hana_install.log )
   shell: ./hdblcm --configfile=/tmp/hana_install_{{ item.value.hana_sid|lower}}.cfg -b --remote_execution=saphostagent {{ item.value.hdblcm_params| default('') }} >> /var/log/hana_install_{{ item.value.hana_sid|lower}}.log
   args:
-    chdir: "{{ hana_installdir }}/DATA_UNITS/HDB_SERVER_LINUX_{{ ansible_architecture|upper }}/"
+    chdir: "{{ sap_hana_installdir }}/"
     creates: "/usr/sap/{{ item.value.hana_sid|upper }}/HDB{{ item.value.hana_instance_number }}/exe/hdbdaemon"
   with_dict: "{{ instances }}"
   when: deployment_instance is defined
-  
+
 # ########### ANDBUICK 2017-07-27
 # additional information about the "hdblcm"-tool
 # from SAP HANA Administration Guide / SAP HANA 2.0 Vers.01 2016-11-30# 

@@ -17,7 +17,7 @@ The deployment of this role follows the style guide from Adfinis Sygroup. [Click
 
 ### Important Steps from the documention:
 
-. Check if SAP Hostagent is running
+1. Check if SAP Hostagent is running
 ```
 [root@vm31 ~]# /usr/sap/hostctrl/exe/saphostctrl -function Ping ; echo $?
 SUCCESS (    3697 usec)
@@ -30,12 +30,11 @@ FAILED (    2525 usec)
 1
 ```
 
-. Check for running SID or INSTANCE 
-
+2. Check for running SID or INSTANCE
++
 ```
 [root@hana1-repl ~]# /usr/sap/hostctrl/exe/saphostctrl -function ListInstances
  Inst Info : RH1 - 10 - hana1-repl - 749, patch 418, changelist 1816226
-
 ```
 
 
@@ -49,7 +48,7 @@ Generic options:
   -host  <hostname>
   -user  <username> <password>
   -https|-sso
-  -format [flat|tree|cimobject] where supported. 
+  -format [flat|tree|cimobject] where supported.
 
 Supported Webmethods:
   Ping
@@ -90,7 +89,7 @@ Supported Webmethods:
         [-swpatches    Additionally, get information on installed patches (sapitsam only)
         [-topprocesses Additionally, get information on top N CPU utilizing OS processes (sapitsam only, default top 40)
   ListDatabases
-     
+
   ListDatabaseSystems
     List available Database Systems
   ListDatabaseMetrics
@@ -98,7 +97,7 @@ Supported Webmethods:
   ListDatabaseConfiguration
     -dbname <DB name> -dbtype <ada|db6|mss...> [-dbhost <hostname>] [-dbinstance <instance name>] [-dbuser <DB admin username>] [-dbpass <DB admin password>] [-dbhostcheck <no|all|strict>] [-dberroronval] [-id <';' separated list of config ID's>]
   GetDatabaseStatus
-    -dbname <DB name> -dbtype <ada|db6|mss...> [-dbhost <hostname>] [-dbinstance <instance name>] [-dbuser <DB admin username>] [-dbpass <DB admin password>] 
+    -dbname <DB name> -dbtype <ada|db6|mss...> [-dbhost <hostname>] [-dbinstance <instance name>] [-dbuser <DB admin username>] [-dbpass <DB admin password>]
   GetDatabaseSystemStatus
     -dbname <DB name> -dbtype <ada|db6|mss...> [-dbhost <hostname>] [-dbinstance <instance name>] [-dbuser <DB admin username>] [-dbpass <DB admin password>] [-dbhostcheck <no|all|strict>]
   StartDatabase
@@ -110,7 +109,7 @@ Supported Webmethods:
   DetachDatabase
     -dbname <DB name> -dbtype <ada|db6|mss...> [-dbconfdir </path/to/config-dir>] [-dbhost <hostname>] [-dbinstance <instance name>] [-dbuser <DB admin username>] [-dbpass <DB admin password>] [-timeout <timeout in sec>] [-service] [-instance] [-force]
   GetDatabaseProperties
-    -dbname <DB name> -dbtype <ada|db6|mss...> [-dbhost <hostname>] [-dbinstance <instance name>] [-dbuser <DB admin username>] [-dbpass <DB admin password>] 
+    -dbname <DB name> -dbtype <ada|db6|mss...> [-dbhost <hostname>] [-dbinstance <instance name>] [-dbuser <DB admin username>] [-dbpass <DB admin password>]
   SetDatabaseProperty
     -dbname <DB name> -dbtype <ada|db6|mss...> [-dbhost <hostname>] [-dbuser <DB admin username>] [-dbpass <DB admin password>] [-dboption <Additional parameter name>=<Additional parameter value>] <DB Property Name>=<DB Property Value>
   LiveDatabaseUpdate
@@ -157,7 +156,7 @@ Supported Webmethods:
   DeployConfiguration
     -target <configuration target (e.g. operation)> -file <configuration file name> [-file <file>...] [-target <target> -file <configuration file name> [-file <file>...]]...
   GetCapabilities
-    
+
   ListOSMetrics
         [-id <metric id (default all), can be specified multiple times>]
         [-iv <interval in seconds (60 (default), 300, 900, 3600)>]
@@ -184,7 +183,7 @@ Supported Webmethods:
         Optionally, -and, -or arguments can be used to explicitly specify the combination operator.
         And'ing has higher precedence than or'ing.
   GetSAPOSColVersion
-    
+
   GetSAPOSColHWConf
     -format <tree|flat>
   AddIpAddress
@@ -248,7 +247,7 @@ Supported Webmethods:
          -register <file/directory> Add a file to OutsideDiscovery configuration for sld registration
          -unregister <file/directory> Remove a file from OutsideDiscovery configuration for sld registration
   ReloadConfiguration
-    
+
   EnableCORS
          -name <service codebase, e.g. slplugin>
          -url <url[,url]> [-url <url[,url]>...]

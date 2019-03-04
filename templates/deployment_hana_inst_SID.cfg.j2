@@ -63,7 +63,7 @@ userid={{ item.value.id_user_sidadm }}
 shell={{ item.value.hana_shell | default('/bin/sh') }}
 
 # ID of User Group (sapsys)
-groupid={{ id_group_sapsys }}
+groupid={{ sap_gid_sapsys }}
 
 # Directory containing a storage configuration
 storage_cfg={{ item.value.hana_storage_cfg | default('') }}

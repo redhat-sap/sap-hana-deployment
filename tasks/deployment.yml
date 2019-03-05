@@ -8,7 +8,7 @@
   with_dict: "{{ instances }}"
 
 # Generate Template under Linux
-# ./hdbinst --dump_configfile_template=/tmp/test.cfg
+# ./hdblcm --dump_configfile_template=/tmp/test.cfg
 - name: copy installation answer file
   template: src=deployment_hana_inst_SID.cfg.j2 dest=/tmp/hana_install_{{ item.value.hana_sid|lower}}.cfg
   with_dict: "{{ instances }}"

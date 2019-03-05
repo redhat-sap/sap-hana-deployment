@@ -95,7 +95,7 @@
     chdir: "{{ sap_hana_installdir }}/"
     creates: "/usr/sap/{{ item.value.hana_sid|upper }}/HDB{{ item.value.hana_instance_number }}/exe/hdbdaemon"
   with_dict: "{{ instances }}"
-  when: deployment_instance is defined
+  when: deployment_instance is defined and deployment_instance|bool == true
 
 # ########### ANDBUICK 2017-07-27
 # additional information about the "hdblcm"-tool

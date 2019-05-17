@@ -33,7 +33,7 @@ root_password={{ item.value.hana_root_user | default('') }}
 
 
 # SAP Host Agent User (sapadm) Password
-sapadm_password={{ pw_user_sapadm_clear }}
+sapadm_password={{ sap_sapadm_pw_clear }}
 
 # SAP HANA System ID
 sid={{ item.value.hana_sid|upper }}
@@ -63,7 +63,7 @@ userid={{ item.value.id_user_sidadm }}
 shell={{ item.value.hana_shell | default('/bin/sh') }}
 
 # ID of User Group (sapsys)
-groupid={{ sap_gid_sapsys }}
+groupid={{ sap_sapsys_gid }}
 
 # Directory containing a storage configuration
 storage_cfg={{ item.value.hana_storage_cfg | default('') }}

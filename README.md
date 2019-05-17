@@ -1,6 +1,8 @@
 saphana-preconfigure
 =====================
 
+**** NEED REWORK ****
+
 This role git@github.com:mk-ansible-roles/saphana-preconfigure.git. This role configures a RHEL 6.7 or 7.x system according to the SAP notes so that SAP HANA is installable
 
 Requirements
@@ -70,10 +72,12 @@ When you unpack your installation archives like this, it is save to define hana_
 ### Further Variables to prepare the HANA deployment
 - `hostname`: system hostname, needed for internal tests for Scale-Out and SAP Host Agent, and for multihomed systems. Use `"{{ ansible_hostname }}"` as default value. It's recommended to use `host_vars/hostname` to set this file
 - `hana_pw_hostagent_ssl`: Password for SAP Host Agent
-- `id_user_sapadm`: System user ID for Linux user sapadm
-- `id_group_shm`: System Group ID for <sid>shm
-- `id_group_sapsys`:  System group ID for Linux group sapsys
-- `pw_user_sapadm_clear`: Password for Linux system user sapadm in clear text
+- `sap_sapadm_uid`: System user ID for Linux user sapadm
+- `sap_sapadm_pw_clear`: Password for Linux system user sapadm in clear text
+- `sap_sapsys_gid`:  System group ID for Linux group sapsys
+- `sap_hana_sidadm_uid`: System user ID for <sid>adm
+- `sap_hana_sidadm_pw_clear`: Password for Linux system user sidadm in clear text
+- `sap_hana_sidshm_gid`: System Group ID for <sid>shm
 
 The variable definitions can be in the playbook or can also be made in an according groups_var or host_vars file
 
@@ -142,10 +146,9 @@ Here is an example playbook that installs a complete server
               hana_installdir: "{{ installroot + '/HANA2SPS02' }}"
 
               hana_pw_hostagent_ssl: "MyS3cret!"
-              id_user_sapadm: "20202"
-              id_group_shm: "20202"
-              id_group_sapsys: "20202"
-              pw_user_sapadm_clear: "MyS3cret!"
+              sap_sapadm_uid: "20202"
+              sap_sapsys_gid "20202"
+              sap_sapadm_pw_clear: "MyS3cret!"
 
       roles:
               - { role: mk-ansible-roles.subscribe-rhn }

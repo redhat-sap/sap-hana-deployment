@@ -1,0 +1,45 @@
+# Global Default variables
+# Adapt to your default settings
+
+# Target host path and file name for the bundle installation file
+bundle_path:
+bundle_sar_file_name:
+
+# Target host path and file name for the sapcar installation file
+sapcar_path:
+sapcar_file_name:
+
+
+# Response variables for unattended installation config file
+
+deploy_hostagent: 'n'
+hana_install_path: '/hana/shared'
+root_password:
+sapadm_password:
+hana_sid:
+hana_instance_number:
+hana_env_type: 'production'
+hana_mem_restrict: 'y'
+hana_max_mem:
+hana_master_password:
+hana_userid:
+hana_groupid: sapsys
+hana_db_system_password:
+system_restart: 'n'
+xs_install: 'n'
+xs_path:
+xs_orgname: 'orgname'
+xs_org_user: 'XSA_ADMIN'
+xs_org_password:
+xs_prod_space: 'PROD'
+xs_routing_mode: 'ports'
+xs_domain_name:
+xs_sap_space_user:
+xs_customer_space_user:
+xs_components:
+xs_components_nostart: 'none'
+lss_user:
+lss_group:
+lss_user_password:
+lss_backup_password:
+ase_user_password:

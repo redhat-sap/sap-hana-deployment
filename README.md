@@ -35,6 +35,10 @@ It is also important that your disks are setup according to the [SAP storage req
 
 | variable | info | required? |
 |:--------:|:----:|:---------:|
+|bundle_path|Target host directory path where SAP Installation Bundle SAR file is located|yes|
+|bundle_sar_file_name|Installation Bundle SAR file name|yes|
+|sapcar_path|Target host directory directory path where SAPCAR tool file is located|yes|
+|sapcar_file_name|SAPCAR tool file name|yes|
 |deploy_hostagent|Whatever you want to deploy SAP HostAgent or not|no, defaulted to `n` value|
 |hana_install_path|Installation Path for SAP HANA|no, defaulted to `/hana/shared` value|
 |root_password|Root User Password|yes|
@@ -87,10 +91,23 @@ The upstream version of these role can be found [here](https://github.com/linux-
 ## Example Inventory
 
 ```yaml
+bundle_path: /usr/local/src
+bundle_sar_file_name: IMDB_SERVER20_045_0-80002031.SAR
+sapcar_path: /usr/local/src
+sapcar_file_name: SAPCAR_1311-80000935.EXE
 root_password: "mysecretpassword"
 sapadm_password: "mysecretpassword"
-hana_sid: "saphostagentrpm_44-20009394.rpm"
-clean_tmp_directory: true
+hana_sid:
+hana_instance_number:
+hana_env_type: development
+hana_mem_restrict: 'n'
+hana_master_password: "mysecretpassword"
+hana_db_system_password: "mysecretpassword"
+lss_user: lsadm
+lss_group: lsgrp
+lss_user_password: "mysecretpassword"
+lss_backup_password: "mysecretpassword"
+ase_user_password: "mysecretpassword"
 ```
 
 ## License

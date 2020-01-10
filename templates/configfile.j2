@@ -128,7 +128,7 @@ home=/usr/sap/{{ hana_sid }}/home
 shell=/bin/sh
 
 # System Administrator User ID
-userid={{ hana_userid | default(hana_sid + 'adm', true) }}
+userid={{ hana_userid | default(hana_sid | lower + 'adm', true) }}
 
 # ID of User Group (sapsys)
 groupid={{ hana_groupid }}

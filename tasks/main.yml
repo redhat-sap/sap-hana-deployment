@@ -1,10 +1,10 @@
 ---
 
 - import_tasks: ev_user.yml
-  when: hana_userid | trim == ''
+  when: hana_userid == ''
 
 - import_tasks: ev_group.yml
-  when: hana_groupid | trim == ''
+  when: hana_groupid == ''
 
 - name: Use SAPCAR to extract the SAP HANA Bundle SAR file
   command: "{{ sapcar_path }}/{{ sapcar_file_name }} -xvf {{ bundle_path }}/{{ bundle_sar_file_name }} -manifest SIGNATURE.SMF"

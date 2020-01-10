@@ -9,7 +9,7 @@
 
 - name: Get next available group ID in the 1000-1100 range
   shell: >
-    awk -F: '{uid[$3]=1}END{for(x=1000; x<=1100; x++) {if(uid[x] != ""){}else{print x; exit;}}}' /etc/group
+    awk -F: '{ uid[$3]=1 }END{ for(x=1000; x<=1100; x++) { if(uid[x] != ""){}else{print x; exit; }}}' /etc/group
   register: nextgroupid
   when: checkgroup.stdout | length = 0
 

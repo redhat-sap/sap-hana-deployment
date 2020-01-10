@@ -2,7 +2,7 @@
 
 - name: Get next available user ID in the 1000-1100 range
   shell: >
-    awk -F: '{uid[$3]=1}END{for(x=1000; x<=1100; x++) {if(uid[x] != ""){}else{print x; exit;}}}' /etc/passwd
+    awk -F: '{ uid[$3]=1 }END{ for(x=1000; x<=1100; x++) { if(uid[x] != ""){}else{ print x; exit; }}}' /etc/passwd
   register: nextuserid
   changed_when: false
   failed_when: nextuserid.rc != 0

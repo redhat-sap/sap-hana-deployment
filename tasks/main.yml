@@ -11,8 +11,20 @@
   set_fact:
     hana_source_path: "{{ sapcar_path }}/SAP_HANA_DATABASE"
 
+- name: create temporary directory to store the processed template
+  tempfile:
+    state: directory
+    suffix: hanaconfig
+  register: tmpdir
+
+- name: "Process HANA Configfile Template"
+  template:
+    src: "{{ role_path}}/templates/configfile.j2"
+    dest: "{{ tmpdir.path }}/configfile.cfg"
+  register: cftemplate
+
 - name: Install SAP HANA
-  command: "./hdblcm --configfile={{ lookup('template', 'configfile.j2') }} -b"
+  command: "./hdblcm --configfile={{ tmpdir.path }}/configfile.cfg -b"
   register: installhana
   args:
     chdir: "{{ hana_source_path }}"

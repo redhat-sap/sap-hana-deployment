@@ -1,5 +1,11 @@
 ---
 
+- import_tasks: ev_user.yml
+  when: hana_userid == ""
+
+- import_tasks: ev_group.yml
+  when: hana_groupid == ""
+
 - name: Use SAPCAR to extract the SAP HANA Bundle SAR file
   command: "{{ sapcar_path }}/{{ sapcar_file_name }} -xvf {{ bundle_path }}/{{ bundle_sar_file_name }} -manifest SIGNATURE.SMF"
   register: extractbundle
@@ -10,36 +16,6 @@
 - name: Setting fact for HANA installer path
   set_fact:
     hana_source_path: "{{ sapcar_path }}/SAP_HANA_DATABASE"
-
-- name: Get next available user ID in the 1000-1100 range
-  shell: >
-    awk -F: '{uid[$3]=1}END{for(x=1000; x<=1100; x++) {if(uid[x] != ""){}else{print x; exit;}}}' /etc/passwd
-  register: nextuserid
-
-- name: Set fact for User ID
-  set_fact:
-    hana_userid: "{{ nextuserid.stdout }}"
-
-- name: Evaluate if 'sapsys' group already exists
-  shell: >
-    grep sapsys /etc/group | cut -d ":" -f 3
-  register: checkgroup
-
-- name: Get next available group ID in the 1000-1100 range
-  shell: >
-    awk -F: '{uid[$3]=1}END{for(x=1000; x<=1100; x++) {if(uid[x] != ""){}else{print x; exit;}}}' /etc/group
-  register: nextgroupid
-  when: checkgroup.stdout == ""
-
-- name: Set fact for Group ID when 'sapsys' group does not exist
-  set_fact:
-    hana_groupid: "{{ nextgroupid.stdout }}"
-  when: checkgroup.stdout == ""
-
-- name: Set fact for Group ID when 'sapsys' group does exist
-  set_fact:
-    hana_groupid: "{{ checkgroup.stdout }}"
-  when: checkgroup.stdout != ""
 
 - name: create temporary directory to store the processed template
   tempfile:

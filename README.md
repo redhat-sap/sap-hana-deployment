@@ -40,6 +40,7 @@ It is also important that your disks are setup according to the [SAP storage req
 |sapcar_path|Target host directory directory path where SAPCAR tool file is located|yes|
 |sapcar_file_name|SAPCAR tool file name|yes|
 |deploy_hostagent|Whatever you want to deploy SAP HostAgent or not|no, defaulted to `n` value|
+|use_master_password|Use single master password for all users, created during installation|no, defaulted to `n` value|
 |hana_install_path|Installation Path for SAP HANA|no, defaulted to `/hana/shared` value|
 |root_password|Root User Password|yes|
 |sapadm_password|SAP Host Agent User (sapadm) Password|yes|
@@ -50,8 +51,8 @@ It is also important that your disks are setup according to the [SAP storage req
 |hana_max_mem|Maximum Memory Allocation in MB|yes (unless `hana_mem_restrict` value is `n`)|
 |common_master_password|Common password for both OS users and DB Administrator user (SYSTEM)|no|
 |system_password|DB Administrator user (SYSTEM) password|yes|
-|hana_userid|System Administrator User ID|no, defaulted to '{{ hana_sid }}adm'|
-|hana_groupid|ID of User Group|no, defaulted to `sapsys`|
+|hana_userid|System Administrator User ID|no, defaulted to next available ID|
+|hana_groupid|ID of User Group|no, defaulted next available ID|
 |hana_db_system_password|Database User (SYSTEM) Password|yes|
 |system_restart|Restart system after machine reboot|no, defaulted to `n`|
 |xs_install|Install XS Advanced in the default tenant database|no, defaulted to `n`|

@@ -14,6 +14,7 @@ sapcar_file_name:
 
 deploy_hostagent: 'n'
 hana_install_path: '/hana/shared'
+use_master_password: 'n'
 root_password:
 sapadm_password:
 hana_sid:

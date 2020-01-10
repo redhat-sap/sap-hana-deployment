@@ -10,7 +10,7 @@ component_dirs=
 component_root=
 
 # Use single master password for all users, created during installation ( Default: n )
-use_master_password=n
+use_master_password={{ use_master_password }}
 
 # Skip all SAP Host Agent calls ( Default: n )
 skip_hostagent_calls=n
@@ -58,7 +58,7 @@ checkmnt=
 # Installation Path ( Default: /hana/shared )
 sapmnt={{ hana_install_path }}
 
-# Local Host Name ( Default: sles-02 )
+# Local Host Name
 hostname={{ ansible_hostname }}
 
 # Install SSH Key ( Default: y )
@@ -128,7 +128,7 @@ home=/usr/sap/{{ hana_sid }}/home
 shell=/bin/sh
 
 # System Administrator User ID
-userid={{ hana_userid | default(hana_sid | lower + 'adm', true) }}
+userid={{ hana_userid }}
 
 # ID of User Group (sapsys)
 groupid={{ hana_groupid }}

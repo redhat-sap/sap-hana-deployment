@@ -18,7 +18,7 @@
 
 - name: Set fact for User ID
   set_fact:
-    hana_userid: nextuserid.stdout
+    hana_userid: "{{ nextuserid.stdout }}"
 
 - name: Evaluate if 'sapsys' group already exists
   shell: >
@@ -33,12 +33,12 @@
 
 - name: Set fact for Group ID when 'sapsys' group does not exist
   set_fact:
-    hana_groupid: nextgroupid.stdout
+    hana_groupid: "{{ nextgroupid.stdout }}"
   when: checkgroup.stdout == ""
 
 - name: Set fact for Group ID when 'sapsys' group does exist
   set_fact:
-    hana_groupid: checkgroup.stdout
+    hana_groupid: "{{ checkgroup.stdout }}"
   when: checkgroup.stdout != ""
 
 - name: create temporary directory to store the processed template

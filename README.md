@@ -51,8 +51,8 @@ It is also important that your disks are setup according to the [SAP storage req
 |hana_max_mem|Maximum Memory Allocation in MB|yes (unless `hana_mem_restrict` value is `n`)|
 |common_master_password|Common password for both OS users and DB Administrator user (SYSTEM)|no|
 |system_password|DB Administrator user (SYSTEM) password|yes|
-|hana_userid|System Administrator User ID|no, defaulted to next available ID|
-|hana_groupid|ID of User Group|no, defaulted next available ID|
+|hana_userid|System Administrator User ID|no, defaulted to next available user ID|
+|hana_groupid|ID of User Group|no, defaulted next available group ID|
 |hana_db_system_password|Database User (SYSTEM) Password|yes|
 |system_restart|Restart system after machine reboot|no, defaulted to `n`|
 |xs_install|Install XS Advanced in the default tenant database|no, defaulted to `n`|

@@ -25,7 +25,7 @@ hana_max_mem:
 common_master_password:
 system_password:
 hana_userid:
-hana_groupid: sapsys
+hana_groupid:
 hana_db_system_password:
 system_restart: 'n'
 xs_install: 'n'

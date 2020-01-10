@@ -29,12 +29,12 @@
   shell: >
     awk -F: '{uid[$3]=1}END{for(x=1000; x<=1100; x++) {if(uid[x] != ""){}else{print x; exit;}}}' /etc/group
   register: nextgroupid
-  when: checkgroup.stdout = ""
+  when: checkgroup.stdout == ""
 
 - name: Set fact for Group ID when 'sapsys' group does not exist
   set_fact:
     hana_groupid: nextgroupid.stdout
-  when: checkgroup.stdout = ""
+  when: checkgroup.stdout == ""
 
 - name: Set fact for Group ID when 'sapsys' group does exist
   set_fact:

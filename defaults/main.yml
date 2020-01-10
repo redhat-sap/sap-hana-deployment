@@ -23,7 +23,7 @@ hana_env_type: 'production'
 hana_mem_restrict: 'y'
 hana_max_mem:
 common_master_password:
-system_password:
+sidadm_password:
 hana_userid:
 hana_groupid:
 hana_db_system_password:

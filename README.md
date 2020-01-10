@@ -50,7 +50,7 @@ It is also important that your disks are setup according to the [SAP storage req
 |hana_mem_restrict|Restrict maximum memory allocation|no, defaulted to `y` value|
 |hana_max_mem|Maximum Memory Allocation in MB|yes (unless `hana_mem_restrict` value is `n`)|
 |common_master_password|Common password for both OS users and DB Administrator user (SYSTEM)|no|
-|system_password|DB Administrator user (SYSTEM) password|yes|
+|sidadm_password|Password for user <sid>adm|yes|
 |hana_userid|System Administrator User ID|no, defaulted to next available user ID|
 |hana_groupid|ID of User Group|no, defaulted next available group ID|
 |hana_db_system_password|Database User (SYSTEM) Password|yes|

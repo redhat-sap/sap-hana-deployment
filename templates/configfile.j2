@@ -116,10 +116,10 @@ max_mem={{ hana_max_mem }}
 certificates_hostmap=
 
 # Master Password
-master_password={{ variable }}
+master_password={{ common_master_password }}
 
 # System Administrator Password
-password={{ hana_master_password }}
+password={{ system_password }}
 
 # System Administrator Home Directory ( Default: /usr/sap/${sid}/home )
 home=/usr/sap/{{ hana_sid }}/home

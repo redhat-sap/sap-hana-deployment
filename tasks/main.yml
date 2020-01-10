@@ -16,4 +16,4 @@
   register: installhana
   args:
     chdir: "{{ hana_source_path }}"
-  changed_when: "'SAP HANA Lifecycle Management' in installagent.stdout"
+  changed_when: "'SAP HANA Lifecycle Management' in installhana.stdout"

@@ -32,7 +32,6 @@ It is also important that your disks are setup according to the [SAP storage req
 
 ## Role Variables
 
-
 | variable | info | required? |
 |:--------:|:----:|:---------:|
 |bundle_path|Target host directory path where SAP Installation Bundle SAR file is located|yes|
@@ -72,7 +71,6 @@ It is also important that your disks are setup according to the [SAP storage req
 |lss_user_password|Local Secure Store User Password|yes|
 |lss_backup_password|Local Secure Store Auto Backup Password|yes|
 |ase_user_password|SAP ASE Administrator Password|yes|
-
 
 ## Dependencies
 

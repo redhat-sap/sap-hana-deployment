@@ -9,10 +9,15 @@ bundle_sar_file_name:
 sapcar_path:
 sapcar_file_name:
 
+# Target host path and file name for the license file
+license_path:
+license_file_name:
+
 
 # Response variables for unattended installation config file
 
 deploy_hostagent: 'n'
+apply_license: false
 hana_install_path: '/hana/shared'
 use_master_password: 'n'
 root_password:

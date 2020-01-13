@@ -40,25 +40,28 @@ It is also important that your disks are setup according to the [SAP storage req
 |sapcar_file_name|SAPCAR tool file name|yes|
 |deploy_hostagent|Whatever you want to deploy SAP HostAgent or not|no, defaulted to `n` value|
 |use_master_password|Use single master password for all users, created during installation|no, defaulted to `n` value|
-|hana_install_path|Installation Path for SAP HANA|no, defaulted to `/hana/shared` value|
+|common_master_password|Common password for both OS users and DB Administrator user (SYSTEM)|no, only if use_master_password is `y`|
 |root_password|Root User Password|yes|
-|sapadm_password|SAP Host Agent User (sapadm) Password|yes|
+|sapadm_password|SAP Host Agent User (sapadm) Password|no, will take the value from `common_master_password` when `use_master_password` is `y`|
+|sidadm_password|Password for user \<sid>adm|no, will take the value from `common_master_password` when `use_master_password` is `y`|
+|hana_db_system_password|Database User (SYSTEM) Password|no, will take the value from `common_master_password` when `use_master_password` is `y`|
+|ase_user_password|SAP ASE Administrator Password|yes|
+|xs_org_password|XS Advanced Admin User Password|Only if `xs_install` is `y`|
+|lss_user_password|Local Secure Store User Password|yes|
+|lss_backup_password|Local Secure Store Auto Backup Password|yes|
+|hana_install_path|Installation Path for SAP HANA|no, defaulted to `/hana/shared` value|
 |hana_sid|SAP HANA System ID|yes|
 |hana_instance_number|Instance Number|yes|
 |hana_env_type|System Usage, Valid values: production, test, development or custom|no, defaulted to `production` value|
 |hana_mem_restrict|Restrict maximum memory allocation|no, defaulted to `y` value|
 |hana_max_mem|Maximum Memory Allocation in MB|yes (unless `hana_mem_restrict` value is `n`)|
-|common_master_password|Common password for both OS users and DB Administrator user (SYSTEM)|no|
-|sidadm_password|Password for user \<sid>adm|yes|
 |hana_userid|System Administrator User ID|no, defaulted to next available user ID|
 |hana_groupid|ID of User Group|no, defaulted next available group ID|
-|hana_db_system_password|Database User (SYSTEM) Password|yes|
 |system_restart|Restart system after machine reboot|no, defaulted to `n`|
 |xs_install|Install XS Advanced in the default tenant database|no, defaulted to `n`|
 |xs_path|XS Advanced App Working Path|Only if `xs_install` is `y`|
 |xs_orgname|Organization Name For Space "SAP"|Only if `xs_install` is `y`, defaulted to `orgname`|
 |xs_org_user|XS Advanced Admin User|Only if `xs_install` is `y`, defaulted to `XSA_ADMIN`|
-|xs_org_password|XS Advanced Admin User Password|Only if `xs_install` is `y`|
 |xs_prod_space|Customer Space Name|Only if `xs_install` is `y`, defaulted to `PROD`|
 |xs_routing_mode|Routing Mode (Valid values: ports and hostnames)|Only if `xs_install` is `y`, defaulted to `ports`|
 |xs_domain_name|XS Advanced Domain Name|Only if `xs_install` is `y`|
@@ -68,9 +71,9 @@ It is also important that your disks are setup according to the [SAP storage req
 |xs_components_nostart|Do not start the selected XS Advanced components after installation|Only if `xs_install` is `y`, defaulted to `none`|
 |lss_user|Local Secure Store User ID|yes|
 |lss_group|Local Secure Store User Group ID|yes|
-|lss_user_password|Local Secure Store User Password|yes|
-|lss_backup_password|Local Secure Store Auto Backup Password|yes|
-|ase_user_password|SAP ASE Administrator Password|yes|
+|apply_license|Whether to apply a License File to the deployed HANA instance|no, defaulted to 'false'|
+|license_path|Target host directory path where HANA license file located|no, required if `apply_license` true|
+|license_file_name|HANA license file name|no, required if `apply_license` true|
 
 ## Dependencies
 
@@ -97,8 +100,8 @@ sapcar_path: /usr/local/src
 sapcar_file_name: SAPCAR_1311-80000935.EXE
 root_password: "mysecretpassword"
 sapadm_password: "mysecretpassword"
-hana_sid:
-hana_instance_number:
+hana_sid: RHE
+hana_instance_number: 01
 hana_env_type: development
 hana_mem_restrict: 'n'
 hana_master_password: "mysecretpassword"
@@ -108,6 +111,9 @@ lss_group: lsgrp
 lss_user_password: "mysecretpassword"
 lss_backup_password: "mysecretpassword"
 ase_user_password: "mysecretpassword"
+apply_license: true
+license_path: /usr/local/src
+license_file_name: RHE.txt
 ```
 
 ## License

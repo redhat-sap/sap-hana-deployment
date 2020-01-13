@@ -6,6 +6,12 @@
 - import_tasks: ev_group.yml
   when: hana_groupid == ''
 
+- import_tasks: license.yml
+  when: apply_license
+
+- import_tasks: password_facts.yml
+  when: use_master_password == 'y'
+
 - name: Use SAPCAR to extract the SAP HANA Bundle SAR file
   command: "{{ sapcar_path }}/{{ sapcar_file_name }} -xvf {{ bundle_path }}/{{ bundle_sar_file_name }} -manifest SIGNATURE.SMF"
   register: extractbundle

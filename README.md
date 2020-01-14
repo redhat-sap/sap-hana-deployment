@@ -1,6 +1,6 @@
 # sap-hana-deployment [![Build Status](https://travis-ci.com/redhat-sap/sap-hana-deployment.svg?branch=master)](https://travis-ci.com/redhat-sap/sap-hana-deployment)
 
-This role installs SAP HANA on a RHEL 7.x or 8.x system.
+This role installs SAP HANA on a RHEL 7.x or 8.x system and applies a permament HANA License.
 
 ## Requirements
 
@@ -51,7 +51,7 @@ It is also important that your disks are setup according to the [SAP storage req
 |lss_backup_password|Local Secure Store Auto Backup Password|yes|
 |hana_install_path|Installation Path for SAP HANA|no, defaulted to `/hana/shared` value|
 |hana_sid|SAP HANA System ID|yes|
-|hana_instance_number|Instance Number|yes|
+|hana_instance_number|Instance Number|yes - **note the required double quotes while adding the variable to your inventory so this is interpreted as a string** |
 |hana_env_type|System Usage, Valid values: production, test, development or custom|no, defaulted to `production` value|
 |hana_mem_restrict|Restrict maximum memory allocation|no, defaulted to `y` value|
 |hana_max_mem|Maximum Memory Allocation in MB|yes (unless `hana_mem_restrict` value is `n`)|
@@ -74,6 +74,16 @@ It is also important that your disks are setup according to the [SAP storage req
 |apply_license|Whether to apply a License File to the deployed HANA instance|no, defaulted to 'false'|
 |license_path|Target host directory path where HANA license file located|no, required if `apply_license` true|
 |license_file_name|HANA license file name|no, required if `apply_license` true|
+
+## HANA Deploy and HANA Lincese
+
+While using this role 2 different scenarios can be covered. These are SAP HANA deployment in a new RHEL Server and set the HANA DB License in an existing deployment.
+
+In order the role to run the first scenario, SAP HANA deployment in a new RHEL Server, the variable `apply_license` must be `false`.
+
+In order the role to run the second scenario, set the HANA DB License in an existing deployment, the variable `apply_license` must be `true`.
+
+Variables required for both scenarios are the ones specified already.
 
 ## Dependencies
 
@@ -101,7 +111,7 @@ sapcar_file_name: SAPCAR_1311-80000935.EXE
 root_password: "mysecretpassword"
 sapadm_password: "mysecretpassword"
 hana_sid: RHE
-hana_instance_number: 01
+hana_instance_number: "01"
 hana_env_type: development
 hana_mem_restrict: 'n'
 hana_master_password: "mysecretpassword"

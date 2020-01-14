@@ -77,7 +77,7 @@ It is also important that your disks are setup according to the [SAP storage req
 
 ## HANA Deploy and HANA Lincese
 
-While using this role 2 different scenarios cna be covered. These are SAP HANA deployment in a new RHEL Server and set the HANA DB License in an existing deployment.
+While using this role 2 different scenarios can be covered. These are SAP HANA deployment in a new RHEL Server and set the HANA DB License in an existing deployment.
 
 In order the role to run the first scenario, SAP HANA deployment in a new RHEL Server, the variable `apply_license` must be `false`.
 

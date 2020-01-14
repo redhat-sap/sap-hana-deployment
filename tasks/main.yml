@@ -9,35 +9,7 @@
 - import_tasks: password_facts.yml
   when: use_master_password == 'y'
 
-- name: Use SAPCAR to extract the SAP HANA Bundle SAR file
-  command: "{{ sapcar_path }}/{{ sapcar_file_name }} -xvf {{ bundle_path }}/{{ bundle_sar_file_name }} -manifest SIGNATURE.SMF"
-  register: extractbundle
-  args:
-    chdir: "{{ sapcar_path }}"
-  changed_when: "'SAPCAR: processing archive' in extractbundle.stdout"
-
-- name: Setting fact for HANA installer path
-  set_fact:
-    hana_source_path: "{{ sapcar_path }}/SAP_HANA_DATABASE"
-
-- name: create temporary directory to store the processed template
-  tempfile:
-    state: directory
-    suffix: hanaconfig
-  register: tmpdir
-
-- name: "Process HANA Configfile Template"
-  template:
-    src: "{{ role_path }}/templates/configfile.j2"
-    dest: "{{ tmpdir.path }}/configfile.cfg"
-  register: cftemplate
-
-- name: Install SAP HANA
-  command: "./hdblcm --configfile={{ tmpdir.path }}/configfile.cfg -b"
-  register: installhana
-  args:
-    chdir: "{{ hana_source_path }}"
-  changed_when: "'SAP HANA Lifecycle Management' in installhana.stdout"
+- import_tasks: hana_deploy.yml
 
 - import_tasks: license.yml
   when: apply_license

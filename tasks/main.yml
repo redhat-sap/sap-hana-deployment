@@ -6,9 +6,6 @@
 - import_tasks: ev_group.yml
   when: hana_groupid == ''
 
-- import_tasks: license.yml
-  when: apply_license
-
 - import_tasks: password_facts.yml
   when: use_master_password == 'y'
 
@@ -41,3 +38,6 @@
   args:
     chdir: "{{ hana_source_path }}"
   changed_when: "'SAP HANA Lifecycle Management' in installhana.stdout"
+
+- import_tasks: license.yml
+  when: apply_license

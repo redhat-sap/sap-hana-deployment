@@ -75,7 +75,7 @@ It is also important that your disks are setup according to the [SAP storage req
 |license_path|Target host directory path where HANA license file located|no, required if `apply_license` true|
 |license_file_name|HANA license file name|no, required if `apply_license` true|
 
-## HANA Deploy and HANA Lincese 
+## HANA Deploy and HANA Lincese
 
 While using this role 2 different scenarios cna be covered. These are SAP HANA deployment in a new RHEL Server and set the HANA DB License in an existing deployment.
 

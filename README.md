@@ -51,7 +51,7 @@ It is also important that your disks are setup according to the [SAP storage req
 |lss_backup_password|Local Secure Store Auto Backup Password|yes|
 |hana_install_path|Installation Path for SAP HANA|no, defaulted to `/hana/shared` value|
 |hana_sid|SAP HANA System ID|yes|
-|hana_instance_number|Instance Number|yes|
+|hana_instance_number|Instance Number|yes - **note the required double quotes while adding the variable to your inventory so this is interpreted as a string** |
 |hana_env_type|System Usage, Valid values: production, test, development or custom|no, defaulted to `production` value|
 |hana_mem_restrict|Restrict maximum memory allocation|no, defaulted to `y` value|
 |hana_max_mem|Maximum Memory Allocation in MB|yes (unless `hana_mem_restrict` value is `n`)|
@@ -111,7 +111,7 @@ sapcar_file_name: SAPCAR_1311-80000935.EXE
 root_password: "mysecretpassword"
 sapadm_password: "mysecretpassword"
 hana_sid: RHE
-hana_instance_number: 01
+hana_instance_number: "01"
 hana_env_type: development
 hana_mem_restrict: 'n'
 hana_master_password: "mysecretpassword"

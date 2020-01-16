@@ -15,10 +15,10 @@
 
 - name: Set fact for Group ID when 'sapsys' group does not exist
   set_fact:
-    hana_groupid: "{{ nextgroupid.stdout }}"
+    sap_hana_deployment_hana_groupid: "{{ nextgroupid.stdout }}"
   when: checkgroup.stdout | length = 0
 
 - name: Set fact for Group ID when 'sapsys' group does exist
   set_fact:
-    hana_groupid: "{{ checkgroup.stdout }}"
+    sap_hana_deployment_hana_groupid: "{{ checkgroup.stdout }}"
   when: checkgroup.stdout | length > 0

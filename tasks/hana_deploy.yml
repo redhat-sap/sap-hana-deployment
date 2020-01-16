@@ -1,15 +1,18 @@
 ---
 
 - name: Use SAPCAR to extract the SAP HANA Bundle SAR file
-  command: "{{ sapcar_path }}/{{ sapcar_file_name }} -xvf {{ bundle_path }}/{{ bundle_sar_file_name }} -manifest SIGNATURE.SMF"
+  command: >-
+    {{ sap_hana_deployment_sapcar_path }}/{{ sap_hana_deployment_sapcar_file_name }} \
+    -xvf {{ sap_hana_deployment_bundle_path }}/{{ sap_hana_deployment_bundle_sar_file_name }} \
+    -manifest SIGNATURE.SMF
   register: extractbundle
   args:
-    chdir: "{{ sapcar_path }}"
+    chdir: "{{ sap_hana_deployment_sapcar_path }}"
   changed_when: "'SAPCAR: processing archive' in extractbundle.stdout"
 
 - name: Setting fact for HANA installer path
   set_fact:
-    hana_source_path: "{{ sapcar_path }}/SAP_HANA_DATABASE"
+    hana_source_path: "{{ sap_hana_deployment_sapcar_path }}/SAP_HANA_DATABASE"
 
 - name: create temporary directory to store the processed template
   tempfile:

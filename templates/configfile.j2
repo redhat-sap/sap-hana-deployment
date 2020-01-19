@@ -10,7 +10,7 @@ component_dirs=
 component_root=
 
 # Use single master password for all users, created during installation ( Default: n )
-use_master_password={{ use_master_password }}
+sap_hana_deployment_use_master_password={{ sap_hana_deployment_use_master_password }}
 
 # Skip all SAP Host Agent calls ( Default: n )
 skip_hostagent_calls=n
@@ -44,7 +44,7 @@ action=install
 use_pmem=n
 
 # Enable the installation or upgrade of the SAP Host Agent ( Default: y )
-install_hostagent={{ deploy_hostagent }}
+install_hostagent={{ sap_hana_deployment_deploy_hostagent }}
 
 # Database Isolation ( Default: low; Valid values: low | high )
 db_isolation=low
@@ -56,7 +56,7 @@ create_initial_tenant=y
 checkmnt=
 
 # Installation Path ( Default: /hana/shared )
-sapmnt={{ hana_install_path }}
+sapmnt={{ sap_hana_deployment_hana_install_path }}
 
 # Local Host Name
 hostname={{ ansible_hostname }}
@@ -68,10 +68,10 @@ install_ssh_key=y
 root_user=root
 
 # Root User Password
-root_password={{ root_password }}
+root_password={{ sap_hana_deployment_root_password }}
 
 # SAP Host Agent User (sapadm) Password
-sapadm_password={{ sapadm_password }}
+sapadm_password={{ sap_hana_deployment_sapadm_password }}
 
 # Directory containing a storage configuration
 storage_cfg=
@@ -83,61 +83,61 @@ listen_interface=
 internal_network=
 
 # SAP HANA System ID
-sid={{ hana_sid }}
+sid={{ sap_hana_deployment_hana_sid }}
 
 # Instance Number
-number={{ hana_instance_number }}
+number={{ sap_hana_deployment_hana_instance_number }}
 
 # Local Host Worker Group ( Default: default )
 workergroup=default
 
 # System Usage ( Default: custom; Valid values: production | test | development | custom )
-system_usage={{ hana_env_type }}
+system_usage={{ sap_hana_deployment_hana_env_type }}
 
 # Location of Data Volumes ( Default: /hana/data/${sid} )
-datapath=/hana/data/{{ hana_sid }}
+datapath=/hana/data/{{ sap_hana_deployment_hana_sid }}
 
 # Location of Log Volumes ( Default: /hana/log/${sid} )
-logpath=/hana/log/{{ hana_sid }}
+logpath=/hana/log/{{ sap_hana_deployment_hana_sid }}
 
 # Location of Persistent Memory Volumes ( Default: /hana/pmem/${sid} )
-pmempath=/hana/pmem/{{ hana_sid }}
+pmempath=/hana/pmem/{{ sap_hana_deployment_hana_sid }}
 
 # Directory containing custom configurations
 custom_cfg=
 
 # Restrict maximum memory allocation?
-restrict_max_mem={{ hana_mem_restrict }}
+restrict_max_mem={{ sap_hana_deployment_hana_mem_restrict }}
 
 # Maximum Memory Allocation in MB
-max_mem={{ hana_max_mem }}
+max_mem={{ sap_hana_deployment_hana_max_mem }}
 
 # Certificate Host Names
 certificates_hostmap=
 
 # Master Password
-master_password={{ common_master_password }}
+master_password={{ sap_hana_deployment_common_master_password }}
 
 # System Administrator Password
-password={{ sidadm_password }}
+password={{ sap_hana_deployment_sidadm_password }}
 
 # System Administrator Home Directory ( Default: /usr/sap/${sid}/home )
-home=/usr/sap/{{ hana_sid }}/home
+home=/usr/sap/{{ sap_hana_deployment_hana_sid }}/home
 
 # System Administrator Login Shell ( Default: /bin/sh )
 shell=/bin/sh
 
 # System Administrator User ID
-userid={{ hana_userid }}
+userid={{ sap_hana_deployment_hana_userid }}
 
 # ID of User Group (sapsys)
-groupid={{ hana_groupid }}
+groupid={{ sap_hana_deployment_hana_groupid }}
 
 # Database User (SYSTEM) Password
-system_user_password={{ hana_db_system_password }}
+system_user_password={{ sap_hana_deployment_hana_db_system_password }}
 
 # Restart system after machine reboot? ( Default: n )
-autostart={{ system_restart }}
+autostart={{ sap_hana_deployment_system_restart }}
 
 # Enable HANA repository ( Default: y )
 repository=y
@@ -165,12 +165,12 @@ import_xs_content=y
 [Client]
 
 # SAP HANA Database Client Installation Path ( Default: ${sapmnt}/${sid}/hdbclient )
-client_path={{ hana_install_path }}/{{ hana_sid }}/hdbclient
+client_path={{ sap_hana_deployment_hana_install_path }}/{{ sap_hana_deployment_hana_sid }}/hdbclient
 
 [Studio]
 
 # SAP HANA Studio Installation Path ( Default: ${sapmnt}/${sid}/hdbstudio )
-studio_path={{ hana_install_path }}/{{ hana_sid }}/hdbstudio
+studio_path={{ sap_hana_deployment_hana_install_path }}/{{ sap_hana_deployment_hana_sid }}/hdbstudio
 
 # Enables copying of SAP HANA Studio repository ( Default: y )
 studio_repository=y
@@ -189,28 +189,28 @@ reference_data_path=
 [XS_Advanced]
 
 # Install XS Advanced in the default tenant database? (y/n) ( Default: n )
-xs_use_default_tenant={{ xs_install }}
+xs_use_default_tenant={{ sap_hana_deployment_xs_install }}
 
 # XS Advanced App Working Path
-xs_app_working_path={{ xs_path }}
+xs_app_working_path={{ sap_hana_deployment_xs_path }}
 
 # Organization Name For Space "SAP" ( Default: orgname )
-org_name={{ xs_orgname }}
+org_name={{ sap_hana_deployment_xs_orgname }}
 
 # XS Advanced Admin User ( Default: XSA_ADMIN )
-org_manager_user={{ xs_org_user }}
+org_manager_user={{ sap_hana_deployment_xs_org_user }}
 
 # XS Advanced Admin User Password
-org_manager_password={{ xs_org_password }}
+org_manager_password={{ sap_hana_deployment_xs_org_password }}
 
 # Customer Space Name ( Default: PROD )
-prod_space_name={{ xs_prod_space }}
+prod_space_name={{ sap_hana_deployment_xs_prod_space }}
 
 # Routing Mode ( Default: ports; Valid values: ports | hostnames )
-xs_routing_mode={{ xs_routing_mode }}
+xs_routing_mode={{ sap_hana_deployment_xs_routing_mode }}
 
 # XS Advanced Domain Name (see SAP Note 2245631)
-xs_domain_name={{ xs_domain_name }}
+xs_domain_name={{ sap_hana_deployment_xs_domain_name }}
 
 # Run Applications in SAP Space with Separate OS User (y/n) ( Default: y )
 xs_sap_space_isolation=y
@@ -219,16 +219,16 @@ xs_sap_space_isolation=y
 xs_customer_space_isolation=y
 
 # XS Advanced SAP Space OS User ID
-xs_sap_space_user_id={{ xs_sap_space_user }}
+xs_sap_space_user_id={{ sap_hana_deployment_xs_sap_space_user }}
 
 # XS Advanced Customer Space OS User ID
-xs_customer_space_user_id={{ xs_customer_space_user }}
+xs_customer_space_user_id={{ sap_hana_deployment_xs_customer_space_user }}
 
 # XS Advanced Components
-xs_components={{ xs_components }} (CSV)
+xs_components={{ sap_hana_deployment_xs_components }} (CSV)
 
 # Do not start the selected XS Advanced components after installation ( Default: none )
-xs_components_nostart={{ xs_components_nostart }}
+xs_components_nostart={{ sap_hana_deployment_xs_components_nostart }}
 
 # XS Advanced Components Configurations
 xs_components_cfg=
@@ -248,22 +248,22 @@ xs_trust_pem=
 lss_inst_path=/lss/shared
 
 # Local Secure Store User Password
-lss_user_password={{ lss_user_password }}
+lss_user_password={{ sap_hana_deployment_lss_user_password }}
 
 # Local Secure Store User ID
-lss_userid={{ lss_user }}
+lss_userid={{ sap_hana_deployment_lss_user }}
 
 # Local Secure Store User Group ID
-lss_groupid={{ lss_group }}
+lss_groupid={{ sap_hana_deployment_lss_group }}
 
 # Local Secure Store User Home Directory ( Default: /usr/sap/${sid}/lss/home )
-lss_user_home=/usr/sap/{{ hana_sid }}/lss/home
+lss_user_home=/usr/sap/{{ sap_hana_deployment_hana_sid }}/lss/home
 
 # Local Secure Store User Login Shell ( Default: /bin/sh )
 lss_user_shell=/bin/sh
 
 # Local Secure Store Auto Backup Password
-lss_backup_password={{ lss_backup_password }}
+lss_backup_password={{ sap_hana_deployment_lss_backup_password }}
 
 [streaming]
 
@@ -271,26 +271,26 @@ lss_backup_password={{ lss_backup_password }}
 streaming_cluster_manager_password=
 
 # Location of Streaming logstores and runtime information ( Default: /hana/data_streaming/${sid} )
-basepath_streaming=/hana/data_streaming/{{ hana_sid }}
+basepath_streaming=/hana/data_streaming/{{ sap_hana_deployment_hana_sid }}
 
 [es]
 
 # Location of Dynamic Tiering Data Volumes ( Default: /hana/data_es/${sid} )
-es_datapath=/hana/data_es/{{ hana_sid }}
+es_datapath=/hana/data_es/{{ sap_hana_deployment_hana_sid }}
 
 # Location of Dynamic Tiering Log Volumes ( Default: /hana/log_es/${sid} )
-es_logpath=/hana/log_es/{{ hana_sid }}
+es_logpath=/hana/log_es/{{ sap_hana_deployment_hana_sid }}
 
 [ets]
 
 # Location of Data Volumes of the Accelerator for SAP ASE ( Default: /hana/data_ase/${sid} )
-ase_datapath=/hana/data_ase/{{ hana_sid }}
+ase_datapath=/hana/data_ase/{{ sap_hana_deployment_hana_sid }}
 
 # Location of Log Volumes of the Accelerator for SAP ASE ( Default: /hana/log_ase/${sid} )
-ase_logpath=/hana/log_ase/{{ hana_sid }}
+ase_logpath=/hana/log_ase/{{ sap_hana_deployment_hana_sid }}
 
 # SAP ASE Administrator User ( Default: sa )
 ase_user=sa
 
 # SAP ASE Administrator Password
-ase_user_password={{ ase_user_password }}
+ase_user_password={{ sap_hana_deployment_ase_user_password }}

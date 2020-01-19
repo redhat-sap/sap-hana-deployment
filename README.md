@@ -34,54 +34,54 @@ It is also important that your disks are setup according to the [SAP storage req
 
 | variable | info | required? |
 |:--------:|:----:|:---------:|
-|bundle_path|Target host directory path where SAP Installation Bundle SAR file is located|yes|
-|bundle_sar_file_name|Installation Bundle SAR file name|yes|
-|sapcar_path|Target host directory directory path where SAPCAR tool file is located|yes|
-|sapcar_file_name|SAPCAR tool file name|yes|
-|deploy_hostagent|Whatever you want to deploy SAP HostAgent or not|no, defaulted to `n` value|
-|use_master_password|Use single master password for all users, created during installation|no, defaulted to `n` value|
-|common_master_password|Common password for both OS users and DB Administrator user (SYSTEM)|no, only if use_master_password is `y`|
-|root_password|Root User Password|yes|
-|sapadm_password|SAP Host Agent User (sapadm) Password|no, will take the value from `common_master_password` when `use_master_password` is `y`|
-|sidadm_password|Password for user \<sid>adm|no, will take the value from `common_master_password` when `use_master_password` is `y`|
-|hana_db_system_password|Database User (SYSTEM) Password|no, will take the value from `common_master_password` when `use_master_password` is `y`|
-|ase_user_password|SAP ASE Administrator Password|yes|
-|xs_org_password|XS Advanced Admin User Password|Only if `xs_install` is `y`|
-|lss_user_password|Local Secure Store User Password|yes|
-|lss_backup_password|Local Secure Store Auto Backup Password|yes|
-|hana_install_path|Installation Path for SAP HANA|no, defaulted to `/hana/shared` value|
-|hana_sid|SAP HANA System ID|yes|
-|hana_instance_number|Instance Number|yes - **note the required double quotes while adding the variable to your inventory so this is interpreted as a string** |
-|hana_env_type|System Usage, Valid values: production, test, development or custom|no, defaulted to `production` value|
-|hana_mem_restrict|Restrict maximum memory allocation|no, defaulted to `y` value|
-|hana_max_mem|Maximum Memory Allocation in MB|yes (unless `hana_mem_restrict` value is `n`)|
-|hana_userid|System Administrator User ID|no, defaulted to next available user ID|
-|hana_groupid|ID of User Group|no, defaulted next available group ID|
-|system_restart|Restart system after machine reboot|no, defaulted to `n`|
-|xs_install|Install XS Advanced in the default tenant database|no, defaulted to `n`|
-|xs_path|XS Advanced App Working Path|Only if `xs_install` is `y`|
-|xs_orgname|Organization Name For Space "SAP"|Only if `xs_install` is `y`, defaulted to `orgname`|
-|xs_org_user|XS Advanced Admin User|Only if `xs_install` is `y`, defaulted to `XSA_ADMIN`|
-|xs_prod_space|Customer Space Name|Only if `xs_install` is `y`, defaulted to `PROD`|
-|xs_routing_mode|Routing Mode (Valid values: ports and hostnames)|Only if `xs_install` is `y`, defaulted to `ports`|
-|xs_domain_name|XS Advanced Domain Name|Only if `xs_install` is `y`|
-|xs_sap_space_user|XS Advanced SAP Space OS User ID|Only if `xs_install` is `y`|
-|xs_customer_space_user|XS Advanced Customer Space OS User ID|Only if `xs_install` is `y`|
-|xs_components|XS Advanced Components|Only if `xs_install` is `y`|
-|xs_components_nostart|Do not start the selected XS Advanced components after installation|Only if `xs_install` is `y`, defaulted to `none`|
-|lss_user|Local Secure Store User ID|yes|
-|lss_group|Local Secure Store User Group ID|yes|
-|apply_license|Whether to apply a License File to the deployed HANA instance|no, defaulted to 'false'|
-|license_path|Target host directory path where HANA license file located|no, required if `apply_license` true|
-|license_file_name|HANA license file name|no, required if `apply_license` true|
+|sap_hana_deployment_bundle_path|Target host directory path where SAP Installation Bundle SAR file is located|yes|
+|sap_hana_deployment_bundle_sar_file_name|Installation Bundle SAR file name|yes|
+|sap_hana_deployment_sapcar_path|Target host directory directory path where SAPCAR tool file is located|yes|
+|sap_hana_deployment_sapcar_file_name|SAPCAR tool file name|yes|
+|sap_hana_deployment_deploy_hostagent|Whatever you want to deploy SAP HostAgent or not|no, defaulted to `n` value|
+|sap_hana_deployment_use_master_password|Use single master password for all users, created during installation|no, defaulted to `n` value|
+|sap_hana_deployment_common_master_password|Common password for both OS users and DB Administrator user (SYSTEM)|no, only if sap_hana_deployment_use_master_password is `y`|
+|sap_hana_deployment_root_password|Root User Password|yes|
+|sap_hana_deployment_sapadm_password|SAP Host Agent User (sapadm) Password|no, will take the value from `sap_hana_deployment_common_master_password` when `sap_hana_deployment_use_master_password` is `y`|
+|sap_hana_deployment_sidadm_password|Password for user \<sid>adm|no, will take the value from `sap_hana_deployment_common_master_password` when `sap_hana_deployment_use_master_password` is `y`|
+|sap_hana_deployment_hana_db_system_password|Database User (SYSTEM) Password|no, will take the value from `sap_hana_deployment_common_master_password` when `sap_hana_deployment_use_master_password` is `y`|
+|sap_hana_deployment_ase_user_password|SAP ASE Administrator Password|yes|
+|sap_hana_deployment_xs_org_password|XS Advanced Admin User Password|Only if `sap_hana_deployment_xs_install` is `y`|
+|sap_hana_deployment_lss_user_password|Local Secure Store User Password|no|
+|sap_hana_deployment_lss_backup_password|Local Secure Store Auto Backup Password|no|
+|sap_hana_deployment_hana_install_path|Installation Path for SAP HANA|no, defaulted to `/hana/shared` value|
+|sap_hana_deployment_hana_sid|SAP HANA System ID|yes|
+|sap_hana_deployment_hana_instance_number|Instance Number|yes - **note the required double quotes while adding the variable to your inventory so this is interpreted as a string** |
+|sap_hana_deployment_hana_env_type|System Usage, Valid values: production, test, development or custom|no, defaulted to `production` value|
+|sap_hana_deployment_hana_mem_restrict|Restrict maximum memory allocation|no, defaulted to `y` value|
+|sap_hana_deployment_hana_max_mem|Maximum Memory Allocation in MB|yes (unless `sap_hana_deployment_hana_mem_restrict` value is `n`)|
+|sap_hana_deployment_hana_userid|System Administrator User ID|no, defaulted to next available user ID|
+|sap_hana_deployment_hana_groupid|ID of User Group|no, defaulted next available group ID|
+|sap_hana_deployment_system_restart|Restart system after machine reboot|no, defaulted to `n`|
+|sap_hana_deployment_xs_install|Install XS Advanced in the default tenant database|no, defaulted to `n`|
+|sap_hana_deployment_xs_path|XS Advanced App Working Path|Only if `sap_hana_deployment_xs_install` is `y`|
+|sap_hana_deployment_xs_orgname|Organization Name For Space "SAP"|Only if `sap_hana_deployment_xs_install` is `y`, defaulted to `orgname`|
+|sap_hana_deployment_xs_org_user|XS Advanced Admin User|Only if `sap_hana_deployment_xs_install` is `y`, defaulted to `XSA_ADMIN`|
+|sap_hana_deployment_xs_prod_space|Customer Space Name|Only if `sap_hana_deployment_xs_install` is `y`, defaulted to `PROD`|
+|sap_hana_deployment_xs_routing_mode|Routing Mode (Valid values: ports and hostnames)|Only if `sap_hana_deployment_xs_install` is `y`, defaulted to `ports`|
+|sap_hana_deployment_xs_domain_name|XS Advanced Domain Name|Only if `sap_hana_deployment_xs_install` is `y`|
+|sap_hana_deployment_xs_sap_space_user|XS Advanced SAP Space OS User ID|Only if `sap_hana_deployment_xs_install` is `y`|
+|sap_hana_deployment_xs_customer_space_user|XS Advanced Customer Space OS User ID|Only if `sap_hana_deployment_xs_install` is `y`|
+|sap_hana_deployment_xs_components|XS Advanced Components|Only if `sap_hana_deployment_xs_install` is `y`|
+|sap_hana_deployment_xs_components_nostart|Do not start the selected XS Advanced components after installation|Only if `sap_hana_deployment_xs_install` is `y`, defaulted to `none`|
+|sap_hana_deployment_lss_user|Local Secure Store User ID|no|
+|sap_hana_deployment_lss_group|Local Secure Store User Group ID|no|
+|sap_hana_deployment_apply_license|Whether to apply a License File to the deployed HANA instance|no, defaulted to 'false'|
+|sap_hana_deployment_license_path|Target host directory path where HANA license file located|no, required if `sap_hana_deployment_apply_license` true|
+|sap_hana_deployment_license_file_name|HANA license file name|no, required if `sap_hana_deployment_apply_license` true|
 
 ## HANA Deploy and HANA Lincese
 
 While using this role 2 different scenarios can be covered. These are SAP HANA deployment in a new RHEL Server and set the HANA DB License in an existing deployment.
 
-In order the role to run the first scenario, SAP HANA deployment in a new RHEL Server, the variable `apply_license` must be `false`.
+In order the role to run the first scenario, SAP HANA deployment in a new RHEL Server, the variable `sap_hana_deployment_apply_license` must be `false`.
 
-In order the role to run the second scenario, set the HANA DB License in an existing deployment, the variable `apply_license` must be `true`.
+In order the role to run the second scenario, set the HANA DB License in an existing deployment, the variable `sap_hana_deployment_apply_license` must be `true`.
 
 Variables required for both scenarios are the ones specified already.
 
@@ -104,26 +104,21 @@ The upstream version of these role can be found [here](https://github.com/linux-
 ## Example Inventory
 
 ```yaml
-bundle_path: /usr/local/src
-bundle_sar_file_name: IMDB_SERVER20_045_0-80002031.SAR
-sapcar_path: /usr/local/src
-sapcar_file_name: SAPCAR_1311-80000935.EXE
-root_password: "mysecretpassword"
-sapadm_password: "mysecretpassword"
-hana_sid: RHE
-hana_instance_number: "01"
-hana_env_type: development
-hana_mem_restrict: 'n'
-hana_master_password: "mysecretpassword"
-hana_db_system_password: "mysecretpassword"
-lss_user: lsadm
-lss_group: lsgrp
-lss_user_password: "mysecretpassword"
-lss_backup_password: "mysecretpassword"
-ase_user_password: "mysecretpassword"
-apply_license: true
-license_path: /usr/local/src
-license_file_name: RHE.txt
+sap_hana_deployment_bundle_path: /usr/local/src
+sap_hana_deployment_bundle_sar_file_name: IMDB_SERVER20_045_0-80002031.SAR
+sap_hana_deployment_sapcar_path: /usr/local/src
+sap_hana_deployment_sapcar_file_name: SAPCAR_1311-80000935.EXE
+sap_hana_deployment_root_password: "mysecretpassword"
+sap_hana_deployment_sapadm_password: "mysecretpassword"
+sap_hana_deployment_hana_sid: RHE
+sap_hana_deployment_hana_instance_number: "01"
+sap_hana_deployment_hana_env_type: development
+sap_hana_deployment_hana_mem_restrict: 'n'
+sap_hana_deployment_hana_db_system_password: "mysecretpassword"
+sap_hana_deployment_ase_user_password: "mysecretpassword"
+sap_hana_deployment_apply_license: true
+sap_hana_deployment_license_path: /usr/local/src
+sap_hana_deployment_license_file_name: RHE.txt
 ```
 
 ## License

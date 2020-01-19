@@ -9,4 +9,4 @@
 
 - name: Set fact for User ID
   set_fact:
-    hana_userid: "{{ nextuserid.stdout }}"
+    sap_hana_deployment_hana_userid: "{{ nextuserid.stdout }}"

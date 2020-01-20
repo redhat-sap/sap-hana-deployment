@@ -2,19 +2,19 @@
 
 - import_tasks: ev_user.yml
   when:
-    - hana_userid == ''
-    - not apply_license
+    - sap_hana_deployment_hana_userid == ''
+    - not sap_hana_deployment_apply_license
 
 - import_tasks: ev_group.yml
   when:
-    - hana_groupid == ''
-    - not apply_license
+    - sap_hana_deployment_hana_groupid == ''
+    - not sap_hana_deployment_apply_license
 
 - import_tasks: password_facts.yml
-  when: use_master_password == 'y'
+  when: sap_hana_deployment_use_master_password == 'y'
 
 - import_tasks: hana_deploy.yml
-  when: not apply_license
+  when: not sap_hana_deployment_apply_license
 
 - import_tasks: license.yml
-  when: apply_license
+  when: sap_hana_deployment_apply_license

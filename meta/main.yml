@@ -1,7 +1,6 @@
 galaxy_info:
   author: Red Hat SAP Community of Practice
   description: Deploys `SAP HANA` on the given host(s)
-  version: 0.1
   license: GPLv3
   min_ansible_version: 2.5
   platforms:

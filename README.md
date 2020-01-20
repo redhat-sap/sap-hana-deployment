@@ -55,7 +55,7 @@ It is also important that your disks are setup according to the [SAP storage req
 |sap_hana_deployment_hana_env_type|System Usage, Valid values: production, test, development or custom|no, defaulted to `production` value|
 |sap_hana_deployment_hana_mem_restrict|Restrict maximum memory allocation|no, defaulted to `y` value|
 |sap_hana_deployment_hana_max_mem|Maximum Memory Allocation in MB|yes (unless `sap_hana_deployment_hana_mem_restrict` value is `n`)|
-|sap_hana_deployment_hana_userid|System Administrator User ID|no, defaulted to next available user ID|
+|sap_hana_deployment_hana_userid|System Administrator User ID (sidadm)|no, defaulted to next available user ID|
 |sap_hana_deployment_hana_groupid|ID of User Group|no, defaulted next available group ID|
 |sap_hana_deployment_system_restart|Restart system after machine reboot|no, defaulted to `n`|
 |sap_hana_deployment_xs_install|Install XS Advanced in the default tenant database|no, defaulted to `n`|

@@ -39,16 +39,11 @@
     state: directory
   with_dict: "{{ instances }}"
 
-- name: ensure sap sid group
-  group: name={{ item.value.hana_sid|lower }}shm gid={{ item.value.id_group_shm }}
-  with_dict: "{{ instances }}"
-
 - name: create sap sid user
   user:
     name: "{{ item.value.hana_sid|lower }}adm"
     uid: "{{ item.value.id_user_sidadm }}"
     group: "sapsys"
-    groups: "{{ item.value.hana_sid|lower }}shm"
     home: "/usr/sap/{{ item.value.hana_sid|upper }}/home"
     password: "{{ item.value.pw_user_sidadm|password_hash('sha512') }}"
   with_dict: "{{ instances }}"

@@ -48,7 +48,7 @@ It is also important that your disks are setup according to the [SAP storage req
 |sap_hana_deployment_ase_user_password|SAP ASE Administrator Password|no|
 |sap_hana_deployment_xs_org_password|XS Advanced Admin User Password|Only if `sap_hana_deployment_xs_install` is `y`|
 |sap_hana_deployment_lss_user_password|Local Secure Store User Password|no|
-|sap_hana_deployment_lss_backup_password|Local Secure Store Auto Backup Password|no|
+|sap_hana_deployment_lss_backup_password|Local Secure Store Auto Backup Password|nop|
 |sap_hana_deployment_hana_install_path|Installation Path for SAP HANA|no, defaulted to `/hana/shared` value|
 |sap_hana_deployment_hana_sid|SAP HANA System ID|yes|
 |sap_hana_deployment_hana_instance_number|Instance Number|yes - **note the required double quotes while adding the variable to your inventory so this is interpreted as a string** |

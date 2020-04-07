@@ -45,7 +45,7 @@ It is also important that your disks are setup according to the [SAP storage req
 |sap_hana_deployment_sapadm_password|SAP Host Agent User (sapadm) Password|no, will take the value from `sap_hana_deployment_common_master_password` when `sap_hana_deployment_use_master_password` is `y`|
 |sap_hana_deployment_sidadm_password|Password for user \<sid>adm|no, will take the value from `sap_hana_deployment_common_master_password` when `sap_hana_deployment_use_master_password` is `y`|
 |sap_hana_deployment_hana_db_system_password|Database User (SYSTEM) Password|no, will take the value from `sap_hana_deployment_common_master_password` when `sap_hana_deployment_use_master_password` is `y`|
-|sap_hana_deployment_ase_user_password|SAP ASE Administrator Password|yes|
+|sap_hana_deployment_ase_user_password|SAP ASE Administrator Password|no|
 |sap_hana_deployment_xs_org_password|XS Advanced Admin User Password|Only if `sap_hana_deployment_xs_install` is `y`|
 |sap_hana_deployment_lss_user_password|Local Secure Store User Password|no|
 |sap_hana_deployment_lss_backup_password|Local Secure Store Auto Backup Password|no|

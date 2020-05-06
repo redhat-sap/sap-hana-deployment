@@ -38,7 +38,7 @@
   register: cftemplate
 
 - name: Install SAP HANA
-  command: "./hdblcm --configfile={{ tmpdir.path }}/configfile.cfg -b"
+  command: "./hdblcm {{ sap_hana_deployment_hdblcm_extraargs }} --configfile={{ tmpdir.path }}/configfile.cfg -b"
   register: installhana
   args:
     chdir: "{{ sap_hana_installdir }}"

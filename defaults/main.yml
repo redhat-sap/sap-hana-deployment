@@ -17,6 +17,9 @@ sap_hana_deployment_sapcar_file_name:
 sap_hana_deployment_license_path:
 sap_hana_deployment_license_file_name:
 
+# Pass some extra arguments to the hdblcm cli, e.g.  --ignore=<check1>[,<check2>]...
+# Specifies failing preequisite checks that the SAP HANA platform lifecycle management tools should ignore.
+sap_hana_deployment_hdblcm_extraargs:
 
 # Response variables for unattended installation config file
 

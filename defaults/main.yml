@@ -9,6 +9,10 @@ sap_hana_deployment_bundle_sar_file_name:
 sap_hana_deployment_sapcar_path:
 sap_hana_deployment_sapcar_file_name:
 
+# if the previous variables are undefined because you do not want to provide a bundle
+# you can define sap_hana_installdir variable, which points to the directory containing hdblcm
+# the role sap-hana-mediacheck can be used to define this variable
+
 # Target host path and file name for the license file
 sap_hana_deployment_license_path:
 sap_hana_deployment_license_file_name:

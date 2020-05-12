@@ -21,7 +21,7 @@
 
 - name: Check availability of "{{ sap_hana_installdir + '/hdblcm' }}"
   stat:
-          path: "{{ sap_hana_installdir + '/hdblcm' }}"
+    path: "{{ sap_hana_installdir + '/hdblcm' }}"
   register: sap_hana_deployment_register_hdblcm_stat
   failed_when: not sap_hana_deployment_register_hdblcm_stat.stat.exists
 

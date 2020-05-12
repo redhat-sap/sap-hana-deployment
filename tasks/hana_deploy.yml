@@ -16,8 +16,8 @@
       set_fact:
         sap_hana_installdir: "{{ sap_hana_deployment_sapcar_path }}/SAP_HANA_DATABASE"
   when:
-    - not((sap_hana_deployment_bundle_path is undefined) or ( sap_hana_deployment_bundle_path is none) or (sap_hana_deployment_bundle_path | trim == '') )
-    - not((sap_hana_deployment_bundle_sar_file_name is undefined) or (sap_hana_deployment_bundle_sar_file_name is none) or (sap_hana_deployment_bundle_sar_file_name | trim == ''))
+    - not(( sap_hana_deployment_bundle_path is none ) or ( sap_hana_deployment_bundle_path | trim == ''))
+    - not(( sap_hana_deployment_bundle_sar_file_name is none ) or (sap_hana_deployment_bundle_sar_file_name | trim == ''))
 
 - name: Check availability of "{{ sap_hana_installdir + '/hdblcm' }}"
   stat:

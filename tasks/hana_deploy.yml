@@ -1,19 +1,30 @@
 ---
 
-- name: Use SAPCAR to extract the SAP HANA Bundle SAR file
-  command: >-
-    {{ sap_hana_deployment_sapcar_path }}/{{ sap_hana_deployment_sapcar_file_name }} \
-    -xvf {{ sap_hana_deployment_bundle_path }}/{{ sap_hana_deployment_bundle_sar_file_name }} \
-    -manifest SIGNATURE.SMF
-  register: extractbundle
-  args:
-    chdir: "{{ sap_hana_deployment_sapcar_path }}"
-  changed_when: "'SAPCAR: processing archive' in extractbundle.stdout"
+- name: Unpack SAPCAR archive (backwards compatibility)
+  block:
+  - name: Use SAPCAR to extract the SAP HANA Bundle SAR file
+    command: >-
+      {{ sap_hana_deployment_sapcar_path }}/{{ sap_hana_deployment_sapcar_file_name }} \
+      -xvf {{ sap_hana_deployment_bundle_path }}/{{ sap_hana_deployment_bundle_sar_file_name }} \
+      -manifest SIGNATURE.SMF
+    register: extractbundle
+    args:
+      chdir: "{{ sap_hana_deployment_sapcar_path }}"
+    changed_when: "'SAPCAR: processing archive' in extractbundle.stdout"
 
-- name: Setting fact for HANA installer path
-  set_fact:
-    hana_source_path: "{{ sap_hana_deployment_sapcar_path }}/SAP_HANA_DATABASE"
+  - name: Setting fact for HANA installer path
+    set_fact:
+      sap_hana_installdir: "{{ sap_hana_deployment_sapcar_path }}/SAP_HANA_DATABASE"
+  when:
+    - not(( sap_hana_deployment_bundle_path is none ) or ( sap_hana_deployment_bundle_path | trim == ''))
+    - not(( sap_hana_deployment_bundle_sar_file_name is none ) or (sap_hana_deployment_bundle_sar_file_name | trim == ''))
 
+- name: Check availability of "{{ sap_hana_installdir + '/hdblcm' }}"
+  stat:
+    path: "{{ sap_hana_installdir + '/hdblcm' }}"
+  register: sap_hana_deployment_register_hdblcm_stat
+  failed_when: not sap_hana_deployment_register_hdblcm_stat.stat.exists
+  
 - name: create temporary directory to store the processed template
   tempfile:
     state: directory
@@ -30,5 +41,5 @@
   command: "./hdblcm --configfile={{ tmpdir.path }}/configfile.cfg -b"
   register: installhana
   args:
-    chdir: "{{ hana_source_path }}"
+    chdir: "{{ sap_hana_installdir }}"
   changed_when: "'SAP HANA Lifecycle Management' in installhana.stdout"

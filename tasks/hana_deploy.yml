@@ -23,7 +23,7 @@
   block:
     - name: Use unzip to extract the SAP HANA Bundle ZIP file
       command: >-
-        unzip {{ sap_hana_deployment_zip_path }}/{{ sap_hana_deployment_zip_file_name }}
+        unzip -fo {{ sap_hana_deployment_zip_path }}/{{ sap_hana_deployment_zip_file_name }}
       register: sap_hana_deployment_register_extractzip
       args:
         chdir: "{{ sap_hana_deployment_zip_path }}"

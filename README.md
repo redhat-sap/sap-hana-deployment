@@ -34,9 +34,11 @@ It is also important that your disks are setup according to the [SAP storage req
 
 | variable |             info             | required? |
 |:--------:|:----------------------------:|:---------:|
-|sap_hana_installdir| directory, where hdblcm is located | No, if `sap_hana_deployment_bundle_path`, `sap_hana_deployment_bundle_sar_file_name`, `sap_hana_deployment_sapcar_path` and `sap_hana_deployment_sapcar_file_name`	are defined.|
-|sap_hana_deployment_bundle_path|Target host directory path where SAP Installation Bundle SAR file is located|yes, unless `sap_hana_installdir` is defined|
+|sap_hana_installdir| directory, where hdblcm is located | No, if `sap_hana_deployment_bundle_path`, `sap_hana_deployment_bundle_sar_file_name`, `sap_hana_deployment_sapcar_path` and `sap_hana_deployment_sapcar_file_name`	or `sap_hana_deployment_zip_path` and `sap_hana_deployment_zip_file_name` are defined.|
+|sap_hana_deployment_bundle_path|Target host directory path where SAP HANA Installation Bundle SAR file is located|yes, unless `sap_hana_installdir` is defined|
 |sap_hana_deployment_bundle_sar_file_name|Installation Bundle SAR file name|yes, unless `sap_hana_installdir` is defined|
+|sap_hana_deployment_zip_path|Target host directory path where SAP HANA Installation Bundle ZIP file is located|No, if `sap_hana_installdir` or `sap_hana_deployment_bundle_path`, `sap_hana_deployment_bundle_sar_file_name`, `sap_hana_deployment_sapcar_path` and `sap_hana_deployment_sapcar_file_name` are defined|
+|sap_hana_deployment_zip_file_name|Installation Bundle ZIP file name|No, if `sap_hana_installdir` or `sap_hana_deployment_bundle_path`, `sap_hana_deployment_bundle_sar_file_name`, `sap_hana_deployment_sapcar_path` and `sap_hana_deployment_sapcar_file_name` are defined|
 |sap_hana_deployment_sapcar_path|Target host directory directory path where SAPCAR tool file is located|yes, unless `sap_hana_installdir` is defined|
 |sap_hana_deployment_sapcar_file_name|SAPCAR tool file name|yes, unless `sap_hana_installdir` is defined|
 |sap_hana_deployment_hdblcm_extraargs| define extra commandline arguments to hdblcm, such as `--ignore=check1[,check2]` | No |
@@ -50,16 +52,19 @@ It is also important that your disks are setup according to the [SAP storage req
 |sap_hana_deployment_ase_user_password|SAP ASE Administrator Password|no|
 |sap_hana_deployment_xs_org_password|XS Advanced Admin User Password|Only if `sap_hana_deployment_xs_install` is `y`|
 |sap_hana_deployment_lss_user_password|Local Secure Store User Password|no|
-|sap_hana_deployment_lss_backup_password|Local Secure Store Auto Backup Password|nop|
+|sap_hana_deployment_lss_backup_password|Local Secure Store Auto Backup Password|no|
 |sap_hana_deployment_hana_install_path|Installation Path for SAP HANA|no, defaulted to `/hana/shared` value|
 |sap_hana_deployment_hana_sid|SAP HANA System ID|yes|
 |sap_hana_deployment_hana_instance_number|Instance Number|yes - **note the required double quotes while adding the variable to your inventory so this is interpreted as a string** |
 |sap_hana_deployment_hana_env_type|System Usage, Valid values: production, test, development or custom|no, defaulted to `production` value|
 |sap_hana_deployment_hana_mem_restrict|Restrict maximum memory allocation|no, defaulted to `y` value|
 |sap_hana_deployment_hana_max_mem|Maximum Memory Allocation in MB|yes (unless `sap_hana_deployment_hana_mem_restrict` value is `n`)|
+|sap_hana_deployment_certificates_hostmap|Hostname used for generation of self-signed SSL certificates for the SAP Host Agent|no|
 |sap_hana_deployment_hana_userid|System Administrator User ID (sidadm)|no, defaulted to next available user ID|
 |sap_hana_deployment_hana_groupid|ID of User Group|no, defaulted next available group ID|
 |sap_hana_deployment_system_restart|Restart system after machine reboot|no, defaulted to `n`|
+|sap_hana_deployment_create_initial_tenant|Create an initial tenant with the SAP HANA installation|yes, defaulted to `y`|
+|sap_hana_deployment_hostname|Hostname for the installation (e.g.if a virtual name is to be used)|yes, defaulted to the physical hostname|
 |sap_hana_deployment_xs_install|Install XS Advanced in the default tenant database|no, defaulted to `n`|
 |sap_hana_deployment_xs_path|XS Advanced App Working Path|Only if `sap_hana_deployment_xs_install` is `y`|
 |sap_hana_deployment_xs_orgname|Organization Name For Space "SAP"|Only if `sap_hana_deployment_xs_install` is `y`, defaulted to `orgname`|

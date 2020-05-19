@@ -39,6 +39,7 @@ sap_hana_deployment_hana_instance_number:
 sap_hana_deployment_hana_env_type: 'production'
 sap_hana_deployment_hana_mem_restrict: 'y'
 sap_hana_deployment_hana_max_mem:
+sap_hana_deployment_certificates_hostmap:
 sap_hana_deployment_common_master_password:
 sap_hana_deployment_sidadm_password:
 sap_hana_deployment_hana_userid:
@@ -46,6 +47,7 @@ sap_hana_deployment_hana_groupid:
 sap_hana_deployment_hana_db_system_password:
 sap_hana_deployment_system_restart: 'n'
 sap_hana_deployment_create_initial_tenant:
+sap_hana_deployment_hostname:
 sap_hana_deployment_xs_install: 'n'
 sap_hana_deployment_xs_path:
 sap_hana_deployment_xs_orgname: 'orgname'

@@ -1,5 +1,5 @@
 [General]
-/
+
 # Location of Installation Medium
 component_medium=
 
@@ -50,7 +50,7 @@ install_hostagent={{ sap_hana_deployment_deploy_hostagent }}
 db_isolation=low
 
 # Create initial tenant database ( Default: y )
-create_initial_tenant={{ sap_hana_deployment_create_initial_tenant }}
+create_initial_tenant={{ sap_hana_deployment_create_initial_tenant|default(y) }}
 
 # Non-standard Shared File System
 checkmnt=

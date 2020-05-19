@@ -1,5 +1,5 @@
 [General]
-
+/
 # Location of Installation Medium
 component_medium=
 
@@ -50,7 +50,7 @@ install_hostagent={{ sap_hana_deployment_deploy_hostagent }}
 db_isolation=low
 
 # Create initial tenant database ( Default: y )
-create_initial_tenant=y
+create_initial_tenant={{ sap_hana_create_initial_tenant }}
 
 # Non-standard Shared File System
 checkmnt=
@@ -59,7 +59,7 @@ checkmnt=
 sapmnt={{ sap_hana_deployment_hana_install_path }}
 
 # Local Host Name
-hostname={{ ansible_hostname }}
+hostname={{ sap_hana_deployment_hostname|default(ansible_hostname) }}
 
 # Install SSH Key ( Default: y )
 install_ssh_key=y
@@ -113,7 +113,7 @@ restrict_max_mem={{ sap_hana_deployment_hana_mem_restrict }}
 max_mem={{ sap_hana_deployment_hana_max_mem }}
 
 # Certificate Host Names
-certificates_hostmap=
+certificates_hostmap={{ sap_hana_deployment_certificates_hostmap }}
 
 # Master Password
 master_password={{ sap_hana_deployment_common_master_password }}

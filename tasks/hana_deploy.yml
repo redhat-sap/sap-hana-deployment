@@ -19,6 +19,24 @@
     - not(( sap_hana_deployment_bundle_path is none ) or ( sap_hana_deployment_bundle_path | trim == ''))
     - not(( sap_hana_deployment_bundle_sar_file_name is none ) or (sap_hana_deployment_bundle_sar_file_name | trim == ''))
 
+- name: Extract ZIP archive
+  block:
+    - name: Use unarchive to extract the SAP HANA Bundle ZIP file
+      unarchive:
+        src: "{{ sap_hana_deployment_zip_path }}/{{ sap_hana_deployment_zip_file_name }}"
+        dest: "{{ sap_hana_deployment_zip_path }}"
+      register: sap_hana_deployment_register_extractzip
+      args:
+        chdir: "{{ sap_hana_deployment_zip_path }}"
+      changed_when: "'extracting' in sap_hana_deployment_register_extractzip.stdout"
+
+    - name: Setting fact for HANA installer path
+      set_fact:
+        sap_hana_installdir: "{{ sap_hana_deployment_zip_path }}/DATA_UNITS/HDB_SERVER_LINUX_X86_64"
+  when:
+    - not(( sap_hana_deployment_zip_path is none ) or ( sap_hana_deployment_zip_path | trim == ''))
+    - not(( sap_hana_deployment_zip_file_name is none ) or (sap_hana_deployment_zip_file_name | trim == ''))
+
 - name: Check availability of "{{ sap_hana_installdir + '/hdblcm' }}"
   stat:
     path: "{{ sap_hana_installdir + '/hdblcm' }}"

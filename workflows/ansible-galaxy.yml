@@ -1,0 +1,18 @@
+name: Ansible Galaxy Import
+
+on: 
+  push:
+    branches:    
+      - master
+    tags:        
+      - v1.*
+
+jobs:
+  galaxy-sync:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: 0x022b/galaxy-role-import-action@v1
+      with:
+        galaxy_api_key: ${{ secrets.galaxy_api_key }}

@@ -26,9 +26,6 @@
         src: "{{ sap_hana_deployment_zip_path }}/{{ sap_hana_deployment_zip_file_name }}"
         dest: "{{ sap_hana_deployment_zip_path }}"
       register: sap_hana_deployment_register_extractzip
-      args:
-        chdir: "{{ sap_hana_deployment_zip_path }}"
-      changed_when: "'extracting' in sap_hana_deployment_register_extractzip.stdout"
 
     - name: Setting fact for HANA installer path
       set_fact:

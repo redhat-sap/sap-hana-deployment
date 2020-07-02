@@ -31,6 +31,8 @@
         chdir: "{{ sap_hana_deployment_zip_path }}"
       #changed_when: "'extracting' in sap_hana_deployment_register_extractzip.stdout"
 
+
+
     - name: Setting fact for HANA installer path
       set_fact:
         sap_hana_installdir: "{{ sap_hana_deployment_zip_path }}/DATA_UNITS/HDB_SERVER_LINUX_X86_64"

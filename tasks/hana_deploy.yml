@@ -21,11 +21,17 @@
 
 - name: Extract ZIP archive
   block:
+    - name: Copy SAP ZIP file - This may take a while
+      synchronize:
+        src: "{{ sap_hana_deployment_zip_local_file }}"
+        dest: "{{ sap_hana_deployment_zip_path }}/{{ sap_hana_deployment_zip_file_name }}"
+      when: sap_hana_deployment_copy_zip_archive|bool == true
+
     - name: Use unarchive to extract the SAP HANA Bundle ZIP file
       unarchive:
         src: "{{ sap_hana_deployment_zip_path }}/{{ sap_hana_deployment_zip_file_name }}"
         dest: "{{ sap_hana_deployment_zip_path }}"
-        mode: '0755'
+        remote_src: "{{ sap_hana_deployment_zip_archive_remote_src }}"
       register: sap_hana_deployment_register_extractzip
 
     - name: Setting fact for HANA installer path
@@ -54,7 +60,7 @@
   register: cftemplate
 
 - name: Install SAP HANA
-  shell: "umask 022; ./hdblcm {{ sap_hana_deployment_hdblcm_extraargs }} --configfile={{ tmpdir.path }}/configfile.cfg -b"
+  command: "./hdblcm {{ sap_hana_deployment_hdblcm_extraargs }} --configfile={{ tmpdir.path }}/configfile.cfg -b"
   register: installhana
   args:
     chdir: "{{ sap_hana_installdir }}"

@@ -65,3 +65,11 @@ sap_hana_deployment_lss_group:
 sap_hana_deployment_lss_user_password:
 sap_hana_deployment_lss_backup_password:
 sap_hana_deployment_ase_user_password:
+
+# for ZIP Archive use remote_src yes in case the zip file is already placed on the target node
+sap_hana_deployment_zip_archive_remote_src: no
+
+# Copy ZIP archive from local node to target node
+sap_hana_deployment_copy_zip_archive: false
+sap_hana_deployment_zip_local_file: /tmp/file.ZIP
+

@@ -25,6 +25,7 @@
       unarchive:
         src: "{{ sap_hana_deployment_zip_path }}/{{ sap_hana_deployment_zip_file_name }}"
         dest: "{{ sap_hana_deployment_zip_path }}"
+        mode: '0755'
       register: sap_hana_deployment_register_extractzip
 
     - name: Setting fact for HANA installer path
@@ -53,7 +54,7 @@
   register: cftemplate
 
 - name: Install SAP HANA
-  command: "./hdblcm {{ sap_hana_deployment_hdblcm_extraargs }} --configfile={{ tmpdir.path }}/configfile.cfg -b"
+  shell: "umask 022; ./hdblcm {{ sap_hana_deployment_hdblcm_extraargs }} --configfile={{ tmpdir.path }}/configfile.cfg -b"
   register: installhana
   args:
     chdir: "{{ sap_hana_installdir }}"

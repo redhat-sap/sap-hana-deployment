@@ -25,7 +25,7 @@
       synchronize:
         src: "{{ sap_hana_deployment_zip_local_file }}"
         dest: "{{ sap_hana_deployment_zip_path }}/{{ sap_hana_deployment_zip_file_name }}"
-      when: sap_hana_deployment_copy_zip_archive|bool == true
+      when: sap_hana_deployment_copy_zip_archive|bool
 
     - name: Use unarchive to extract the SAP HANA Bundle ZIP file
       unarchive:

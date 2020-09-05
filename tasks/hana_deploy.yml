@@ -45,23 +45,27 @@
          if [ -x /usr/sap/hostctrl/exe/saphostctrl ]; then
             /usr/sap/hostctrl/exe/saphostctrl -function GetCIMObject -enuminstances SAPInstance
          fi
+  changed_when: false
   register: sap_hana_deployment_sap_systems_list
 
 - name: Display installed SAP Systems
   debug:
           var: sap_hana_deployment_sap_systems_list
 
-- set_fact:
+- name: Set SID
+  set_fact:
       sap_hana_deployment_installed_sid: "{{ item.split(',').2|trim }}"
   loop: "{{ sap_hana_deployment_sap_systems_list.stdout_lines|list }}"
   when: item is search("^ SID")
 
-- set_fact:
+- name: Set instance number
+  set_fact:
     sap_hana_deployment_installed_num: "{{ item.split(',').2|trim }}"
   loop: "{{ sap_hana_deployment_sap_systems_list.stdout_lines|list }}"
   when: item is search("^ SystemNumber")
 
-- set_fact:
+- name: Set System type
+  set_fact:
     sap_hana_deployment_installed_typ: "{{ item.split(',').2|trim }}"
   loop: "{{ sap_hana_deployment_sap_systems_list.stdout_lines|list }}"
   when: item is search("^ InstanceName")

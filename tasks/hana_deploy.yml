@@ -112,11 +112,12 @@
 - name: skip installation if HANA is already installed
   set_fact:
           sap_hana_deployment_skip: true
-  when:  not ((sap_hana_deployment_installed_typ is defined) and
-         (sap_hana_deployment_installed_sid == sap_hana_deployment_hana_sid) and
-         (sap_hana_deployment_installed_num == sap_hana_deployment_hana_instance_number) and
-         (sap_hana_deployment_installed_typ == "HDB"+sap_hana_deployment_hana_instance_number)
-
+  when:  
+         - sap_hana_deployment_installed_typ is defined
+         - sap_hana_deployment_installed_sid == sap_hana_deployment_hana_sid
+         - sap_hana_deployment_installed_num == sap_hana_deployment_hana_instance_number
+         - sap_hana_deployment_installed_typ == "HDB"+sap_hana_deployment_hana_instance_number
+        
 - name: Install HANA if not on the system
   block:
         - name: create temporary directory to store the processed template

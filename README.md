@@ -81,6 +81,7 @@ It is also important that your disks are setup according to the [SAP storage req
 |sap_hana_deployment_apply_license|Whether to apply a License File to the deployed HANA instance|no, defaulted to 'false'|
 |sap_hana_deployment_license_path|Target host directory path where HANA license file located|no, required if `sap_hana_deployment_apply_license` true|
 |sap_hana_deployment_license_file_name|HANA license file name|no, required if `sap_hana_deployment_apply_license` true|
+|sap_hana_deploymnet_skip| set this to 'true' if the role should not run the Hana Installer | no | 
 
 ## HANA Deploy and HANA Lincese
 

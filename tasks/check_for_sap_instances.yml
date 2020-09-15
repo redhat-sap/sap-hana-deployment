@@ -1,0 +1,89 @@
+---
+
+- name: Don't skip installation
+  set_fact:
+          sap_hana_deployment_skip: false
+  when: sap_hana_deployment_skip is undefined
+
+- name: Search for installed SAP Systems
+  shell: |
+         if [ -x /usr/sap/hostctrl/exe/saphostctrl ]; then
+            /usr/sap/hostctrl/exe/saphostctrl -function GetCIMObject -enuminstances SAPInstance
+         fi
+  changed_when: false
+  register: sap_hana_deployment_sap_systems_list
+
+- name: Display installed SAP Systems
+  debug:
+          var: sap_hana_deployment_sap_systems_list
+
+- name: Set SID
+  set_fact:
+      sap_hana_deployment_installed_sid: "{{ item.split(',').2|trim }}"
+  loop: "{{ sap_hana_deployment_sap_systems_list.stdout_lines|list }}"
+  when: item is search("^ SID")
+
+- name: Set instance number
+  set_fact:
+    sap_hana_deployment_installed_num: "{{ item.split(',').2|trim }}"
+  loop: "{{ sap_hana_deployment_sap_systems_list.stdout_lines|list }}"
+  when: item is search("^ SystemNumber")
+
+- name: Set System type
+  set_fact:
+    sap_hana_deployment_installed_typ: "{{ item.split(',').2|trim }}"
+  loop: "{{ sap_hana_deployment_sap_systems_list.stdout_lines|list }}"
+  when: item is search("^ InstanceName")
+
+- name: Display SID
+  debug:
+          msg:
+            - "Found installed SAP System:"
+            - "SID:    {{ sap_hana_deployment_installed_sid }}"
+            - "Number: {{ sap_hana_deployment_installed_num }}"
+            - "Type:   {{ sap_hana_deployment_installed_typ }}"
+  when: sap_hana_deployment_installed_sid is defined
+
+- name: Fail if SID is already used on the system with different instance number
+  fail:
+          msg: "SID {{ sap_hana_deployment_installed_sid }} is already installed with different instance number"
+  when:
+         - sap_hana_deployment_installed_sid is defined
+         - sap_hana_deployment_installed_sid == sap_hana_deployment_hana_sid
+         - sap_hana_deployment_installed_num != sap_hana_deployment_hana_instance_number
+
+- name: Fail if instance number is used by other SAP component
+  fail:
+          msg: "The instance number {{ sap_hana_deployment_installed_num }} is already used on this system"
+  when:
+         - sap_hana_deployment_installed_num is defined
+         - sap_hana_deployment_installed_num == sap_hana_deployment_hana_instance_number
+         - sap_hana_deployment_installed_sid != sap_hana_deployment_hana_sid
+
+- name: Fail if you try to install HANA with same SID/Instance than other SAP system
+  fail:
+          msg: "There is a non-HANA software with the same SID/instance number running"
+  when:
+         - sap_hana_deployment_installed_typ is defined
+         - sap_hana_deployment_installed_sid == sap_hana_deployment_hana_sid
+         - sap_hana_deployment_installed_num == sap_hana_deployment_hana_instance_number
+         - sap_hana_deployment_installed_typ != "HDB"+sap_hana_deployment_hana_instance_number
+
+- name: Info if HANA is already installed
+  debug:
+          msg: "The HANA Database is already running on the system"
+  when:
+         - sap_hana_deployment_installed_typ is defined
+         - sap_hana_deployment_installed_sid == sap_hana_deployment_hana_sid
+         - sap_hana_deployment_installed_num == sap_hana_deployment_hana_instance_number
+         - sap_hana_deployment_installed_typ == "HDB"+sap_hana_deployment_hana_instance_number
+
+- name: skip installation if HANA is already installed
+  set_fact:
+          sap_hana_deployment_skip: true
+  when:
+         - sap_hana_deployment_installed_typ is defined
+         - sap_hana_deployment_installed_sid == sap_hana_deployment_hana_sid
+         - sap_hana_deployment_installed_num == sap_hana_deployment_hana_instance_number
+         - sap_hana_deployment_installed_typ == "HDB"+sap_hana_deployment_hana_instance_number
+

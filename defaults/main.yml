@@ -26,9 +26,6 @@ sap_hana_deployment_license_file_name:
 # Specifies failing preequisite checks that the SAP HANA platform lifecycle management tools should ignore.
 sap_hana_deployment_hdblcm_extraargs:
 
-# set this to true to skip the deployment of HANA
-sap_hana_deployment_skip: false
-
 # Response variables for unattended installation config file
 
 sap_hana_deployment_deploy_hostagent: 'n'

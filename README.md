@@ -130,7 +130,7 @@ sap_hana_deployment_license_file_name: RHE.txt
 
 ## License
 
-GPLv3
+Apache License 2.0
 
 ## Author Information
 

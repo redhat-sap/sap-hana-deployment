@@ -52,6 +52,21 @@
     dest: "{{ tmpdir.path }}/configfile.cfg"
   register: cftemplate
 
+- name: Copy file /tmp/tail-f-hdblcm-trc.sh
+  copy:
+    src: tmp/tail-f-hdblcm-trc.sh
+    dest: /tmp/tail-f-hdblcm-trc.sh
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Show how to watch the installation process in real time
+  debug:
+    msg:
+      - 'Once the task "Install SAP HANA" has started, you can use the following command in
+         in another terminal to watch the installation progress in real time:'
+      - ssh {{ inventory_hostname }} /tmp/tail-f-hdblcm-trc.sh
+
 - name: Install SAP HANA
   command: "./hdblcm {{ sap_hana_deployment_hdblcm_extraargs }} --configfile={{ tmpdir.path }}/configfile.cfg -b"
   register: installhana

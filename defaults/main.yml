@@ -1,6 +1,11 @@
 # Global Default variables
 # Adapt to your default settings
 
+# If the following variable is set to 'yes', set permissions of
+# /hana/shared, /hana/data, /hana/log, and /usr/sap to 0755.
+# If the variable is set to 'no', verify the permissions.
+sap_hana_deployment_set_permissions: no
+
 # Target host path and file name for the bundle installation file
 sap_hana_deployment_bundle_path:
 sap_hana_deployment_bundle_sar_file_name:

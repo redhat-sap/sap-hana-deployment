@@ -1,5 +1,67 @@
 ---
 
+- name: Set permissions of installation directories to 0755
+  file:
+    path: "{{ line_item }}"
+    state: directory
+    mode: 0755
+  loop:
+    - /hana/shared
+    - /hana/data
+    - /hana/log
+    - /usr/sap
+  loop_control:
+    loop_var: line_item
+  when: sap_hana_deployment_set_permissions
+
+- name: Assert correct permissions of installation directories
+  block:
+  - name: Get permissions of /hana/shared
+    stat:
+      path: /hana/shared
+    register: __sap_hana_deployment_register_stat_hana_shared
+
+  - name: Assert that permissions for /hana/shared are correct
+    assert:
+      that: __sap_hana_deployment_register_stat_hana_shared.stat.mode == '0755'
+      fail_msg: "FAIL: /hana/shared has permissions {{ __sap_hana_deployment_register_stat_hana_shared.stat.mode }} but needs to have '0755'!"
+      success_msg: "PASS: /hana/shared has correct permissions: {{ __sap_hana_deployment_register_stat_hana_shared.stat.mode }}."
+
+  - name: Get permissions of /hana/data
+    stat:
+      path: /hana/shared
+    register: __sap_hana_deployment_register_stat_hana_data
+
+  - name: Assert that permissions for /hana/data are correct
+    assert:
+      that: __sap_hana_deployment_register_stat_hana_data.stat.mode == '0755'
+      fail_msg: "FAIL: /hana/data has permissions {{ __sap_hana_deployment_register_stat_hana_data.stat.mode }} but needs to have '0755'!"
+      success_msg: "PASS: /hana/data has correct permissions: {{ __sap_hana_deployment_register_stat_hana_data.stat.mode }}."
+
+  - name: Get permissions of /hana/log
+    stat:
+      path: /hana/log
+    register: __sap_hana_deployment_register_stat_hana_log
+
+  - name: Assert that permissions for /hana/log are correct
+    assert:
+      that: __sap_hana_deployment_register_stat_hana_log.stat.mode == '0755'
+      fail_msg: "FAIL: /hana/log has permissions {{ __sap_hana_deployment_register_stat_hana_log.stat.mode }} but needs to have '0755'!"
+      success_msg: "PASS: /hana/log has correct permissions: {{ __sap_hana_deployment_register_stat_hana_log.stat.mode }}."
+
+  - name: Get permissions of /usr/sap
+    stat:
+      path: /usr/sap
+    register: __sap_hana_deployment_register_stat_usr_sap
+
+  - name: Assert that permissions for /usr/sap are correct
+    assert:
+      that: __sap_hana_deployment_register_stat_usr_sap.stat.mode == '0755'
+      fail_msg: "FAIL: /usr/sap has permissions {{ __sap_hana_deployment_register_stat_usr_sap.stat.mode }} but needs to have '0755'!"
+      success_msg: "PASS: /usr/sap has correct permissions: {{ __sap_hana_deployment_register_stat_usr_sap.stat.mode }}."
+
+  when: not sap_hana_deployment_set_permissions
+
 - name: Unpack SAPCAR archive (backwards compatibility)
   block:
     - name: Use SAPCAR to extract the SAP HANA Bundle SAR file
@@ -40,7 +102,7 @@
   register: sap_hana_deployment_register_hdblcm_stat
   failed_when: not sap_hana_deployment_register_hdblcm_stat.stat.exists
 
-- name: create temporary directory to store the processed template
+- name: Create temporary directory to store the processed template
   tempfile:
     state: directory
     suffix: hanaconfig

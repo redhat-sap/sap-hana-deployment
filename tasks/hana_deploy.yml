@@ -1,102 +1,111 @@
 ---
 
-- name: Set permissions of installation directories to 0755
+- name: Set permissions of installation directories
   file:
-    path: "{{ line_item }}"
+    path: "{{ line_item.name }}"
     state: directory
-    mode: 0755
-  loop:
-    - /hana/shared
-    - /hana/data
-    - /hana/log
-    - /usr/sap
+    mode: "{{ line_item.value }}"
+  with_items: "{{ sap_hana_deployment_directories_permissions }}"
   loop_control:
     loop_var: line_item
   when: sap_hana_deployment_set_permissions
 
 - name: Assert correct permissions of installation directories
-  block:
-  - name: Get permissions of /hana/shared
-    stat:
-      path: /hana/shared
-    register: __sap_hana_deployment_register_stat_hana_shared
-
-  - name: Assert that permissions for /hana/shared are correct
-    assert:
-      that: __sap_hana_deployment_register_stat_hana_shared.stat.mode == '0755'
-      fail_msg: "FAIL: /hana/shared has permissions {{ __sap_hana_deployment_register_stat_hana_shared.stat.mode }} but needs to have '0755'!"
-      success_msg: "PASS: /hana/shared has correct permissions: {{ __sap_hana_deployment_register_stat_hana_shared.stat.mode }}."
-
-  - name: Get permissions of /hana/data
-    stat:
-      path: /hana/shared
-    register: __sap_hana_deployment_register_stat_hana_data
-
-  - name: Assert that permissions for /hana/data are correct
-    assert:
-      that: __sap_hana_deployment_register_stat_hana_data.stat.mode == '0755'
-      fail_msg: "FAIL: /hana/data has permissions {{ __sap_hana_deployment_register_stat_hana_data.stat.mode }} but needs to have '0755'!"
-      success_msg: "PASS: /hana/data has correct permissions: {{ __sap_hana_deployment_register_stat_hana_data.stat.mode }}."
-
-  - name: Get permissions of /hana/log
-    stat:
-      path: /hana/log
-    register: __sap_hana_deployment_register_stat_hana_log
-
-  - name: Assert that permissions for /hana/log are correct
-    assert:
-      that: __sap_hana_deployment_register_stat_hana_log.stat.mode == '0755'
-      fail_msg: "FAIL: /hana/log has permissions {{ __sap_hana_deployment_register_stat_hana_log.stat.mode }} but needs to have '0755'!"
-      success_msg: "PASS: /hana/log has correct permissions: {{ __sap_hana_deployment_register_stat_hana_log.stat.mode }}."
-
-  - name: Get permissions of /usr/sap
-    stat:
-      path: /usr/sap
-    register: __sap_hana_deployment_register_stat_usr_sap
-
-  - name: Assert that permissions for /usr/sap are correct
-    assert:
-      that: __sap_hana_deployment_register_stat_usr_sap.stat.mode == '0755'
-      fail_msg: "FAIL: /usr/sap has permissions {{ __sap_hana_deployment_register_stat_usr_sap.stat.mode }} but needs to have '0755'!"
-      success_msg: "PASS: /usr/sap has correct permissions: {{ __sap_hana_deployment_register_stat_usr_sap.stat.mode }}."
-
+  include_tasks: directories-permissions-assert-loop-block.yml
+  loop: "{{ sap_hana_deployment_directories_permissions }}"
+  loop_control:
+    loop_var: line_item
   when: not sap_hana_deployment_set_permissions
 
-- name: Unpack SAPCAR archive (backwards compatibility)
+- name: Determine SAP HANA bundle file type
+  set_fact:
+    __sap_hana_preconfigure_fact_hana_bundle_file_type: '{{ sap_hana_deployment_bundle_file_name.split(".")[-1] }}'
+
+- name: Show SAP HANA bundle file type
+  debug:
+    var: __sap_hana_preconfigure_fact_hana_bundle_file_type
+
+- name: Copy the necessary SAP files from the control node
   block:
-    - name: Use SAPCAR to extract the SAP HANA Bundle SAR file
+    - name: Copy {{ sap_hana_deployment_bundle_file_name }} from {{ sap_hana_deployment_bundle_path_cn }} on the control node
+      copy:
+        src: "{{ sap_hana_deployment_bundle_path_cn }}/{{ sap_hana_deployment_bundle_file_name }}"
+        dest: "{{ sap_hana_deployment_bundle_path_mn }}/"
+
+    - name: In case the SAP HANA bundle file is a SAR file, copy {{ sap_hana_deployment_sapcar_file_name }} from {{ sap_hana_deployment_sapcar_path_cn }} on the control node and set permissions to '0755'
+      copy:
+        src: "{{ sap_hana_deployment_sapcar_path_cn }}/{{ sap_hana_deployment_sapcar_file_name }}"
+        dest: "{{ sap_hana_deployment_sapcar_path_mn }}/"
+        mode: '0755'
+      when: __sap_hana_preconfigure_fact_hana_bundle_file_type == "SAR"
+
+  when: 
+    - sap_hana_deployment_bundle_is_on_control_node
+    - not sap_hana_deployment_bundle_is_on_managed_node
+
+- name: Copy the necessary SAP files from a third node
+  block:
+    - name: Get the remote user
+      set_fact:
+        __sap_hana_deployment_fact_remote_user: "{{ lookup('env', 'USER') }}"
+
+    - name: Copy {{ sap_hana_deployment_bundle_file_name }} from {{ sap_hana_deployment_sap_software_remote_location }}
+      local_action: command scp -p {{ sap_hana_deployment_sap_software_remote_location }}/{{ sap_hana_deployment_bundle_file_name }} \
+        {{ __sap_hana_deployment_fact_remote_user }}@{{ inventory_hostname }}:{{ sap_hana_deployment_bundle_path_mn }}/
+
+    - name: In case the SAP HANA bundle file is a SAR file, copy {{ sap_hana_deployment_sapcar_file_name }} from {{ sap_hana_deployment_sap_software_remote_location }}
+      local_action: command scp -p {{ sap_hana_deployment_sap_software_remote_location }}/{{ sap_hana_deployment_sapcar_file_name }} \
+        {{ __sap_hana_deployment_fact_remote_user }}@{{ inventory_hostname }}:{{ sap_hana_deployment_sapcar_path_mn }}/
+      when: __sap_hana_preconfigure_fact_hana_bundle_file_type == "SAR"
+
+    - name: In case the SAP HANA bundle file is a SAR file, set the permission of {{ sap_hana_deployment_sapcar_file_name }} to '0755'
+      file:
+        path: "{{ sap_hana_deployment_sapcar_path_mn }}/{{ sap_hana_deployment_sapcar_file_name }}"
+        mode: '0755'
+      when: __sap_hana_preconfigure_fact_hana_bundle_file_type == "SAR"
+
+  when: 
+    - not sap_hana_deployment_bundle_is_on_control_node
+    - not sap_hana_deployment_bundle_is_on_managed_node
+
+- name: Extract the SAP HANA SAPCAR archive
+  block:
+    - name: Use {{ sap_hana_deployment_sapcar_file_name }} to extract {{ sap_hana_deployment_bundle_file_name }} to directory {{ sap_hana_deployment_hana_extract_path }}
       command: >-
-        {{ sap_hana_deployment_sapcar_path }}/{{ sap_hana_deployment_sapcar_file_name }} \
-        -xvf {{ sap_hana_deployment_bundle_path }}/{{ sap_hana_deployment_bundle_sar_file_name }} \
+        {{ sap_hana_deployment_sapcar_path_mn }}/{{ sap_hana_deployment_sapcar_file_name }}
+        -xvf {{ sap_hana_deployment_bundle_path_mn }}/{{ sap_hana_deployment_bundle_file_name }}
         -manifest SIGNATURE.SMF
       register: sap_hana_deployment_register_extractbundle
       args:
-        chdir: "{{ sap_hana_deployment_sapcar_path }}"
+        chdir: "{{ sap_hana_deployment_hana_extract_path }}"
       changed_when: "'SAPCAR: processing archive' in sap_hana_deployment_register_extractbundle.stdout"
 
-    - name: Setting fact for HANA installer path
+    - name: Set fact for the SAP HANA installer path
       set_fact:
-        sap_hana_installdir: "{{ sap_hana_deployment_sapcar_path }}/SAP_HANA_DATABASE"
+        sap_hana_installdir: "{{ sap_hana_deployment_hana_extract_path }}/SAP_HANA_DATABASE"
   when:
-    - not(( sap_hana_deployment_bundle_path is none ) or ( sap_hana_deployment_bundle_path | trim == ''))
-    - not(( sap_hana_deployment_bundle_sar_file_name is none ) or (sap_hana_deployment_bundle_sar_file_name | trim == ''))
+    - not(( sap_hana_deployment_bundle_path_mn is none ) or ( sap_hana_deployment_bundle_path_mn | trim == ''))
+    - not(( sap_hana_deployment_bundle_file_name is none ) or (sap_hana_deployment_bundle_file_name | trim == ''))
+    - __sap_hana_preconfigure_fact_hana_bundle_file_type == "SAR"
 
-- name: Extract ZIP archive
+- name: Extract the SAP HANA ZIP archive
   block:
-    - name: Use unarchive to extract the SAP HANA Bundle ZIP file
+    - name: Unzip {{ sap_hana_deployment_bundle_file_name }} to directory {{ sap_hana_deployment_hana_extract_path }}
       unarchive:
-        src: "{{ sap_hana_deployment_zip_path }}/{{ sap_hana_deployment_zip_file_name }}"
-        dest: "{{ sap_hana_deployment_zip_path }}"
+        src: "{{ sap_hana_deployment_bundle_path_mn }}/{{ sap_hana_deployment_bundle_file_name }}"
+        dest: "{{ sap_hana_deployment_hana_extract_path }}"
+        remote_src: yes
       register: sap_hana_deployment_register_extractzip
 
-    - name: Setting fact for HANA installer path
+    - name: Set fact for the SAP HANA installer path
       set_fact:
-        sap_hana_installdir: "{{ sap_hana_deployment_zip_path }}/DATA_UNITS/HDB_SERVER_LINUX_X86_64"
+        sap_hana_installdir: "{{ sap_hana_deployment_hana_extract_path }}/DATA_UNITS/HDB_SERVER_LINUX_X86_64"
   when:
-    - not(( sap_hana_deployment_zip_path is none ) or ( sap_hana_deployment_zip_path | trim == ''))
-    - not(( sap_hana_deployment_zip_file_name is none ) or (sap_hana_deployment_zip_file_name | trim == ''))
+    - not(( sap_hana_deployment_bundle_path_mn is none ) or ( sap_hana_deployment_bundle_path_mn | trim == ''))
+    - not(( sap_hana_deployment_bundle_file_name is none ) or (sap_hana_deployment_bundle_file_name | trim == ''))
+    - __sap_hana_preconfigure_fact_hana_bundle_file_type == "ZIP"
 
-- name: Check availability of "{{ sap_hana_installdir + '/hdblcm' }}"
+- name: Check if file 'hdblcm' is in {{ sap_hana_installdir }}
   stat:
     path: "{{ sap_hana_installdir + '/hdblcm' }}"
   register: sap_hana_deployment_register_hdblcm_stat
@@ -114,10 +123,10 @@
     dest: "{{ tmpdir.path }}/configfile.cfg"
   register: cftemplate
 
-- name: Copy file /tmp/tail-f-hdblcm-trc.sh
+- name: Copy file tail-f-hdblcm-trc.sh to "{{ tmpdir.path }}"
   copy:
     src: tmp/tail-f-hdblcm-trc.sh
-    dest: /tmp/tail-f-hdblcm-trc.sh
+    dest: "{{ tmpdir.path }}/tail-f-hdblcm-trc.sh"
     owner: root
     group: root
     mode: '0755'
@@ -125,9 +134,11 @@
 - name: Show how to watch the installation process in real time
   debug:
     msg:
-      - 'Once the task "Install SAP HANA" has started, you can use the following command in
-         in another terminal to watch the installation progress in real time:'
-      - ssh {{ inventory_hostname }} /tmp/tail-f-hdblcm-trc.sh
+      - 'Once the task "Install SAP HANA" has started, you can use the following command
+         in a terminal session on the managed node to watch the installation progress in real time:'
+      - "{{ tmpdir.path }}/tail-f-hdblcm-trc.sh"
+      - 'Alternatively, you can run the following command on the control node:'
+      - "ssh {{ inventory_hostname }} {{ tmpdir.path }}/tail-f-hdblcm-trc.sh"
 
 - name: Install SAP HANA
   command: "./hdblcm {{ sap_hana_deployment_hdblcm_extraargs }} --configfile={{ tmpdir.path }}/configfile.cfg -b"

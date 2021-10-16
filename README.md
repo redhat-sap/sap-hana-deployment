@@ -4,7 +4,7 @@ This role installs SAP HANA on a RHEL 7.x or 8.x system and applies a permament 
 
 ## Requirements
 
-This role is intended to use on a RHEL system that gets SAP software.
+This role is intended to be used on a RHEL system on which SAP HANA software is to be installed.
 So your system needs to be installed with at least the RHEL core packages, properly registered and prepared for HANA or Netweaver installation.
 
 It needs access to the software repositories required to install SAP HANA (see also: [How to subscribe SAP HANA systems to the Update Services for SAP Solutions](https://access.redhat.com/solutions/3075991))
@@ -34,14 +34,18 @@ It is also important that your disks are setup according to the [SAP storage req
 
 | variable |             info             | required? |
 |:--------:|:----------------------------:|:---------:|
-|sap_hana_deployment_set_permissions| set or verify correct permissions of 0755 for /hana/shared, /hana/data, /hana/log, and /usr/sap. If set to `yes`, permissions will be set. If set to `no`, permissions will be verified and the role will abort if one of the permissions is not set correctly. | Yes. Default is `no`.|
-|sap_hana_installdir| directory where hdblcm is located |No, if `sap_hana_deployment_bundle_path`, `sap_hana_deployment_bundle_sar_file_name`, `sap_hana_deployment_sapcar_path` and `sap_hana_deployment_sapcar_file_name` or `sap_hana_deployment_zip_path` and `sap_hana_deployment_zip_file_name` are defined.|
-|sap_hana_deployment_bundle_path|Target host directory path where SAP HANA Installation Bundle SAR file is located|yes, unless `sap_hana_installdir` is defined|
-|sap_hana_deployment_bundle_sar_file_name|Installation Bundle SAR file name|yes, unless `sap_hana_installdir` is defined|
-|sap_hana_deployment_zip_path|Target host directory path where SAP HANA Installation Bundle ZIP file is located|No, if `sap_hana_installdir` or `sap_hana_deployment_bundle_path`, `sap_hana_deployment_bundle_sar_file_name`, `sap_hana_deployment_sapcar_path` and `sap_hana_deployment_sapcar_file_name` are defined|
-|sap_hana_deployment_zip_file_name|Installation Bundle ZIP file name|No, if `sap_hana_installdir` or `sap_hana_deployment_bundle_path`, `sap_hana_deployment_bundle_sar_file_name`, `sap_hana_deployment_sapcar_path` and `sap_hana_deployment_sapcar_file_name` are defined|
-|sap_hana_deployment_sapcar_path|Target host directory directory path where SAPCAR tool file is located|yes, unless `sap_hana_installdir` is defined|
-|sap_hana_deployment_sapcar_file_name|SAPCAR tool file name|Yes, unless `sap_hana_installdir` is defined|
+|sap_hana_deployment_directories_permissions| Permissions for /hana/shared, /hana/data, /hana/log, and /usr/sap. | Yes|
+|sap_hana_deployment_set_permissions| Set or verify permissions for /hana/shared, /hana/data, /hana/log, and /usr/sap. If set to `yes`, permissions will be set. If set to `no`, permissions will be verified and the role will abort if one of the permissions is not set correctly. | Yes. Default is `no`.|
+|sap_hana_deployment_bundle_path_mn|Directory path on the managed node where the SAP HANA installation bundle SAR or ZIP file is located|yes, if `sap_hana_installdir` is not defined|
+|sap_hana_deployment_bundle_file_name|File name of the SAP HANA installation bundle SAR or ZIP file|yes, if `sap_hana_installdir` is not defined|
+|sap_hana_deployment_sapcar_file_name|File name of the SAPCAR executable|yes, if `sap_hana_installdir` is not defined and if the HANA installation bundle file type is "SAR"|
+|sap_hana_deployment_sapcar_path_mn|Directory path of the SAPCAR executable on the managed node|yes, if `sap_hana_installdir` is not defined and if the HANA installation bundle file type is "SAR"|
+|sap_hana_deployment_bundle_is_on_managed_node|Define if the SAP HANA installation bundle file is available on the managed node|yes, if `sap_hana_installdir` is not defined|
+|sap_hana_deployment_bundle_is_on_control_node|Define if the SAP HANA installation bundle file is available on the control node|yes, if `sap_hana_installdir` is not defined|
+|sap_hana_deployment_bundle_path_cn|Directory path on the control node where the SAP HANA installation bundle SAR or ZIP file is located|yes, if `sap_hana_installdir` is not defined and if sap_hana_deployment_bundle_is_on_control_node is set to `yes`|
+|sap_hana_deployment_sapcar_path_cn|Directory path on the control node where the SAPCAR executable is located|yes, if `sap_hana_installdir` is not defined and if sap_hana_deployment_bundle_is_on_control_node is set to `yes` and if the HANA installation bundle file type is "SAR" |
+|sap_hana_deployment_sap_software_remote_location|user, hostname, and directory to specify in which directory the SAP HANA installation bundle SAR or ZIP file is located on a third node|yes, if `sap_hana_installdir` is not defined and if sap_hana_deployment_bundle_is_on_managed_node is set to `no` and if sap_hana_deployment_bundle_is_on_control_node is set to `no`|
+|sap_hana_installdir|Directory where hdblcm is located |No, if the location of a SAP HANA installation bundle file is specified using the above variables|
 |sap_hana_deployment_hdblcm_extraargs|Define extra commandline arguments to hdblcm, such as `--ignore=check1[,check2]` | No |
 |sap_hana_deployment_deploy_hostagent|Whatever you want to deploy SAP HostAgent or not|no, defaulted to `n` value|
 |sap_hana_deployment_use_master_password|Use single master password for all users, created during installation|no, defaulted to `n` value|

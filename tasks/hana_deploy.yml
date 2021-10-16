@@ -75,7 +75,7 @@
 
 - name: Extract the SAP HANA SAPCAR archive
   block:
-    - name: Use SAPCAR to extract the SAP HANA bundle file SAR FILE
+    - name: Use SAPCAR to extract the SAP HANA bundle SAR file
       command: >-
         {{ sap_hana_deployment_sapcar_path_mn }}/{{ sap_hana_deployment_sapcar_file_name }}
         -xvf {{ sap_hana_deployment_bundle_path_mn }}/{{ sap_hana_deployment_bundle_file_name }}
@@ -105,7 +105,7 @@
 
     - name: Set fact for the SAP HANA installer path
       set_fact:
-        sap_hana_installdir: "{{ sap_hana_deployment_hana_extract_path }}/DATA_UNITS/HDB_SERVER_LINUX_X86_64"
+        sap_hana_installdir: "{{ sap_hana_deployment_hana_extract_path }}/DATA_UNITS/HDB_SERVER_LINUX_{{ ansible_architecture|upper }}"
   when:
     - not(( sap_hana_deployment_bundle_path_mn is none ) or ( sap_hana_deployment_bundle_path_mn | trim == ''))
     - not(( sap_hana_deployment_bundle_file_name is none ) or (sap_hana_deployment_bundle_file_name | trim == ''))

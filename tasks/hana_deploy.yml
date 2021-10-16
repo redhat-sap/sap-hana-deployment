@@ -20,26 +20,28 @@
 - name: Determine SAP HANA bundle file type
   set_fact:
     __sap_hana_preconfigure_fact_hana_bundle_file_type: '{{ sap_hana_deployment_bundle_file_name.split(".")[-1] }}'
+  when: (( sap_hana_installdir is none ) or ( sap_hana_installdir | trim == ''))
 
 - name: Show SAP HANA bundle file type
   debug:
     var: __sap_hana_preconfigure_fact_hana_bundle_file_type
+  when: (( sap_hana_installdir is none ) or ( sap_hana_installdir | trim == ''))
 
 - name: Copy the necessary SAP files from the control node
   block:
-    - name: Copy {{ sap_hana_deployment_bundle_file_name }} from {{ sap_hana_deployment_bundle_path_cn }} on the control node
+    - name: Copy the SAP HANA installation bundle file from the control node
       copy:
         src: "{{ sap_hana_deployment_bundle_path_cn }}/{{ sap_hana_deployment_bundle_file_name }}"
         dest: "{{ sap_hana_deployment_bundle_path_mn }}/"
 
-    - name: In case the SAP HANA bundle file is a SAR file, copy {{ sap_hana_deployment_sapcar_file_name }} from {{ sap_hana_deployment_sapcar_path_cn }} on the control node and set permissions to '0755'
+    - name: In case the SAP HANA bundle file is a SAR file, copy SAPCAR and set permissions to '0755'
       copy:
         src: "{{ sap_hana_deployment_sapcar_path_cn }}/{{ sap_hana_deployment_sapcar_file_name }}"
         dest: "{{ sap_hana_deployment_sapcar_path_mn }}/"
         mode: '0755'
       when: __sap_hana_preconfigure_fact_hana_bundle_file_type == "SAR"
 
-  when: 
+  when:
     - sap_hana_deployment_bundle_is_on_control_node
     - not sap_hana_deployment_bundle_is_on_managed_node
 
@@ -49,28 +51,31 @@
       set_fact:
         __sap_hana_deployment_fact_remote_user: "{{ lookup('env', 'USER') }}"
 
-    - name: Copy {{ sap_hana_deployment_bundle_file_name }} from {{ sap_hana_deployment_sap_software_remote_location }}
-      local_action: command scp -p {{ sap_hana_deployment_sap_software_remote_location }}/{{ sap_hana_deployment_bundle_file_name }} \
+    - name: Copy the SAP HANA installation bundle file from a third node
+      command: scp -p {{ sap_hana_deployment_sap_software_remote_location }}/{{ sap_hana_deployment_bundle_file_name }} \
         {{ __sap_hana_deployment_fact_remote_user }}@{{ inventory_hostname }}:{{ sap_hana_deployment_bundle_path_mn }}/
+      delegate_to: localhost
 
-    - name: In case the SAP HANA bundle file is a SAR file, copy {{ sap_hana_deployment_sapcar_file_name }} from {{ sap_hana_deployment_sap_software_remote_location }}
-      local_action: command scp -p {{ sap_hana_deployment_sap_software_remote_location }}/{{ sap_hana_deployment_sapcar_file_name }} \
+    - name: In case the SAP HANA bundle file is a SAR file, copy SAPCAR
+      command: scp -p {{ sap_hana_deployment_sap_software_remote_location }}/{{ sap_hana_deployment_sapcar_file_name }} \
         {{ __sap_hana_deployment_fact_remote_user }}@{{ inventory_hostname }}:{{ sap_hana_deployment_sapcar_path_mn }}/
+      delegate_to: localhost
       when: __sap_hana_preconfigure_fact_hana_bundle_file_type == "SAR"
 
-    - name: In case the SAP HANA bundle file is a SAR file, set the permission of {{ sap_hana_deployment_sapcar_file_name }} to '0755'
+    - name: In case the SAP HANA bundle file is a SAR file, set the permission of SAPCAR to '0755'
       file:
         path: "{{ sap_hana_deployment_sapcar_path_mn }}/{{ sap_hana_deployment_sapcar_file_name }}"
         mode: '0755'
       when: __sap_hana_preconfigure_fact_hana_bundle_file_type == "SAR"
 
-  when: 
+  when:
     - not sap_hana_deployment_bundle_is_on_control_node
     - not sap_hana_deployment_bundle_is_on_managed_node
+    - (( sap_hana_installdir is none ) or ( sap_hana_installdir | trim == ''))
 
 - name: Extract the SAP HANA SAPCAR archive
   block:
-    - name: Use {{ sap_hana_deployment_sapcar_file_name }} to extract {{ sap_hana_deployment_bundle_file_name }} to directory {{ sap_hana_deployment_hana_extract_path }}
+    - name: Use SAPCAR to extract the SAP HANA bundle file SAR FILE
       command: >-
         {{ sap_hana_deployment_sapcar_path_mn }}/{{ sap_hana_deployment_sapcar_file_name }}
         -xvf {{ sap_hana_deployment_bundle_path_mn }}/{{ sap_hana_deployment_bundle_file_name }}
@@ -90,11 +95,12 @@
 
 - name: Extract the SAP HANA ZIP archive
   block:
-    - name: Unzip {{ sap_hana_deployment_bundle_file_name }} to directory {{ sap_hana_deployment_hana_extract_path }}
+    - name: Unzip the SAP HANA bundle ZIP file
       unarchive:
         src: "{{ sap_hana_deployment_bundle_path_mn }}/{{ sap_hana_deployment_bundle_file_name }}"
         dest: "{{ sap_hana_deployment_hana_extract_path }}"
         remote_src: yes
+        mode: '0755'
       register: sap_hana_deployment_register_extractzip
 
     - name: Set fact for the SAP HANA installer path
@@ -121,6 +127,7 @@
   template:
     src: "{{ role_path }}/templates/configfile.j2"
     dest: "{{ tmpdir.path }}/configfile.cfg"
+    mode: '0644'
   register: cftemplate
 
 - name: Copy file tail-f-hdblcm-trc.sh to "{{ tmpdir.path }}"

@@ -10,5 +10,6 @@
 - name: Assert that permissions of {{ line_item.name }} are '{{ line_item.value }}'
   assert:
     that: "__sap_hana_deployment_register_stat.stat.mode == '{{ line_item.value }}'"
-    fail_msg: "FAIL: Directory {{ line_item.name }} has permissions '{{ __sap_hana_deployment_register_stat.stat.mode }}' but needs to have '{{ line_item.value }}'!"
+    fail_msg: "FAIL: Directory {{ line_item.name }} has permissions '{{ __sap_hana_deployment_register_stat.stat.mode }}'
+               but needs to have '{{ line_item.value }}'!"
     success_msg: "PASS: Directory {{ line_item.name }} has correct permissions '{{ __sap_hana_deployment_register_stat.stat.mode }}'."

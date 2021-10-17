@@ -56,6 +56,7 @@ In this case, role variable sap_hana_installdir has to be set to the directory i
   - Use a SAP HANA installation bundle file (SAR or ZIP) on the managed node, from the control node, or from a third node.
 
 In this case, the following information has to be provided:
+
     - The location on the managed node to where the SAP HANA installation bundle file is to be extracted (role variable
     sap_hana_deployment_hana_extract_path).
     - The name and the existing or desired localtion of the SAP HANA installation bundle file (role variables

@@ -37,43 +37,39 @@ It is also important that your disks are setup according to the [SAP storage req
 
 ## Actions performed by the role
 ### Get a valid user and group id to be used for the SAP HANA installation
-In case no user and group ID is provided in variables sap_hana_deployment_hana_userid or sap_hana_deployment_hana_groupid, a user and group
-ID is chosen according to certain rules.
+In case no user and group ID is provided by using variables sap_hana_deployment_hana_userid or sap_hana_deployment_hana_groupid,
+a user and group ID is chosen according to certain rules.
 ### Install SAP HANA
-1. Check or Set Permissions of relevant SAP directories
-
+#### Check or Set Permissions of relevant SAP directories
   The role first checks of sets the permissions of SAP directories /hana/shared, /hana/data, /hana/log, and /usr/sap. The role variables
   sap_hana_deployment_directories_permissions and sap_hana_deployment_set_permissions are used for this purpose.
 
-2. Make the SAP HANA installation files available
-
+#### Make the SAP HANA installation files available
   The SAP HANA installation files have to be made available on the managed node before the installation can start. The role can:
 
   - Use an existing HANA installation directory on the managed node
 
-  In this case, role variable sap_hana_installdir has to be set to the directory in which the hdblcm program is located.
+    In this case, role variable sap_hana_installdir has to be set to the directory in which the hdblcm program is located.
 
   - Use a SAP HANA installation bundle file (SAR or ZIP) on the managed node, from the control node, or from a third node.
 
-  In this case, the following information has to be provided:
+    In this case, the following information has to be provided:
 
     - The location on the managed node to where the SAP HANA installation bundle file is to be extracted (role variable
-    sap_hana_deployment_hana_extract_path).
+      sap_hana_deployment_hana_extract_path).
 
     - The name and the existing or desired localtion of the SAP HANA installation bundle file (role variables
-    sap_hana_deployment_bundle_file_name and sap_hana_deployment_bundle_path_mn). In case the installation bundle file is of type SAR,
-    the file name of the SAPCAR executable and its exising or desired location on the managed node has to be specified as well
-    (role variables sap_hana_deployment_sapcar_file_name and sap_hana_deployment_sapcar_path_mn).
+      sap_hana_deployment_bundle_file_name and sap_hana_deployment_bundle_path_mn). In case the installation bundle file is of type SAR,
+      the file name of the SAPCAR executable and its exising or desired location on the managed node has to be specified as well
+      (role variables sap_hana_deployment_sapcar_file_name and sap_hana_deployment_sapcar_path_mn).
 
     - Further information about where the SAP HANA installation bundle (and SAPCAR file, if applicable) are located on the control node
-    or on a third node, if these files are available on the control node or on a third node.
+      or on a third node, if these files are available on the control node or on a third node.
 
-3. Run the SAP HANA installation
-
+#### Run the SAP HANA installation
   Once the SAP HANA installation files are available on the managed node, the installation can be started.
 
-4. Apply the SAP HANA license
-
+#### Apply the SAP HANA license
   After the SAP HANA installation has completed, the SAP HANA license can be applied.
 
 ## Role Variables

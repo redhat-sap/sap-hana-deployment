@@ -40,11 +40,11 @@ It is also important that your disks are setup according to the [SAP storage req
 In case no user and group ID is provided by using variables sap_hana_deployment_hana_userid or sap_hana_deployment_hana_groupid,
 a user and group ID is chosen according to certain rules.
 ### Install SAP HANA
-#### Check or Set Permissions of relevant SAP directories
+#### 1\. Check or Set Permissions of relevant SAP directories
   The role first checks of sets the permissions of SAP directories /hana/shared, /hana/data, /hana/log, and /usr/sap. The role variables
   sap_hana_deployment_directories_permissions and sap_hana_deployment_set_permissions are used for this purpose.
 
-#### Make the SAP HANA installation files available
+#### 2\. Make the SAP HANA installation files available
   The SAP HANA installation files have to be made available on the managed node before the installation can start. The role can:
 
   - Use an existing HANA installation directory on the managed node
@@ -66,10 +66,10 @@ a user and group ID is chosen according to certain rules.
     - Further information about where the SAP HANA installation bundle (and SAPCAR file, if applicable) are located on the control node
       or on a third node, if these files are available on the control node or on a third node.
 
-#### Run the SAP HANA installation
+#### 3\. Run the SAP HANA installation
   Once the SAP HANA installation files are available on the managed node, the installation can be started.
 
-#### Apply the SAP HANA license
+#### 4\. Apply the SAP HANA license
   After the SAP HANA installation has completed, the SAP HANA license can be applied.
 
 ## Role Variables

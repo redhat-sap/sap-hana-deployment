@@ -1,0 +1,18 @@
+---
+
+- name: Set permissions of installation directories
+  file:
+    path: "{{ line_item.name }}"
+    state: directory
+    mode: "{{ line_item.value }}"
+  with_items: "{{ sap_hana_deployment_directories_permissions }}"
+  loop_control:
+    loop_var: line_item
+  when: sap_hana_deployment_set_permissions
+
+- name: Assert correct permissions of installation directories
+  include_tasks: directories-permissions-assert-loop-block.yml
+  loop: "{{ sap_hana_deployment_directories_permissions }}"
+  loop_control:
+    loop_var: line_item
+  when: not sap_hana_deployment_set_permissions

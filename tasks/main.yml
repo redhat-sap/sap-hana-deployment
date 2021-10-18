@@ -13,8 +13,12 @@
 - import_tasks: password_facts.yml
   when: sap_hana_deployment_use_master_password == 'y'
 
-- import_tasks: hana_deploy.yml
-  when: not sap_hana_deployment_apply_license
+- import_tasks: set_or_verify_permissions.yml
 
-- import_tasks: license.yml
+- import_tasks: provide_hana_installation_bundle.yml
+  when: (( sap_hana_installdir is none ) or ( sap_hana_installdir | trim == ''))
+
+- import_tasks: install_hana.yml
+
+- import_tasks: apply_hana_license.yml
   when: sap_hana_deployment_apply_license

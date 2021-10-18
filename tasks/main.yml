@@ -17,7 +17,7 @@
   when: not sap_hana_deployment_apply_license_only
 
 - import_tasks: provide_hana_installation_bundle.yml
-  when: 
+  when:
     - (( sap_hana_installdir is none ) or ( sap_hana_installdir | trim == ''))
     - not sap_hana_deployment_apply_license_only
 

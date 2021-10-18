@@ -16,6 +16,7 @@
       copy:
         src: "{{ sap_hana_deployment_bundle_path_cn }}/{{ sap_hana_deployment_bundle_file_name }}"
         dest: "{{ sap_hana_deployment_bundle_path_mn }}/"
+        mode: '0644'
 
     - name: "cn: If the SAP HANA installation bundle file is a SAR file, copy SAPCAR and set permissions to '0755'"
       copy:

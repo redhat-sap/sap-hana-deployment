@@ -67,7 +67,9 @@ a user and group ID is chosen according to certain rules.
       or on a third node, if these files are available on the control node or on a third node.
 
 #### 3\. Run the SAP HANA installation
-  Once the SAP HANA installation files are available on the managed node, the installation can be started.
+  Once the SAP HANA installation files are available on the managed node, the installation on the is started on the managed node.
+  By specifying a valid argument to variable sap_hana_deployment_addhosts, a SAP HANA scale-out installation is performed on the
+  additional hosts.
 
 #### 4\. Apply the SAP HANA license
   After the SAP HANA installation has completed, the SAP HANA license can be applied.
@@ -113,6 +115,7 @@ a user and group ID is chosen according to certain rules.
 |sap_hana_deployment_system_restart|Restart system after machine reboot|no, defaulted to `n`|
 |sap_hana_deployment_create_initial_tenant|Create an initial tenant with the SAP HANA installation|yes, defaulted to `y`|
 |sap_hana_deployment_hostname|Hostname for the installation (e.g.if a virtual name is to be used)|yes, defaulted to the physical hostname|
+|sap_hana_deployment_addhosts|a valid 'hostname:role=...,hostname:role=...' string as per SAP HANA Server Installation and Updated Guide. Example: 'host02:role=worker:workergroup=wg01:group=g01,host03:role=worker'|Only for HANA scale-out installation|
 |sap_hana_deployment_xs_install|Install XS Advanced in the default tenant database|no, defaulted to `n`|
 |sap_hana_deployment_xs_path|XS Advanced App Working Path|Only if `sap_hana_deployment_xs_install` is `y`|
 |sap_hana_deployment_xs_orgname|Organization Name For Space "SAP"|Only if `sap_hana_deployment_xs_install` is `y`, defaulted to `orgname`|

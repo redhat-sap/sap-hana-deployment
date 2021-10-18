@@ -13,6 +13,12 @@ sap_hana_deployment_directories_permissions:
 # If the variable is set to 'no', verify these permissions. This is the default.
 sap_hana_deployment_set_permissions: no
 
+# If the HANA installation files have already been extracted on the managed node, specify
+# the name of the directory which contains hdblcm here.
+# The role sap-hana-mediacheck can be used to define this variable
+# Example: /hana_install
+sap_hana_installdir:
+
 # Directory of the SAP HANA bundle (.SAR or .ZIP) file on the managed node
 # Example: /sap_download
 sap_hana_deployment_bundle_path_mn:
@@ -36,7 +42,7 @@ sap_hana_deployment_bundle_is_on_managed_node: no
 sap_hana_deployment_bundle_is_on_control_node: no
 
 # Directory of the SAP HANA bundle (.SAR or .ZIP) file on the control node
-# (only needed in case of sap_hana_deployment_bundle_is_on_control_node
+# (only needed in case of sap_hana_deployment_bundle_is_on_control_node)
 # Example: /sap_download
 sap_hana_deployment_bundle_path_cn:
 
@@ -54,13 +60,10 @@ sap_hana_deployment_sap_software_remote_location:
 
 # Directory where to extract the SAP HANA bundle (.SAR or .ZIP) file on the managed node
 # Example: /sap_extract
-sap_hana_deployment_hana_extract_path:
+sap_hana_deployment_hana_extraction_path:
 
-# If the previous variables are undefined because you do not want to provide a bundle,
-# you can define sap_hana_installdir variable, which points to the directory containing hdblcm.
-# The role sap-hana-mediacheck can be used to define this variable
-# Example: /hana_install
-sap_hana_installdir:
+# Apply a SAP HANA DB license only? Default is no.
+sap_hana_deployment_apply_license_only: no
 
 # Target host path and file name for the license file
 sap_hana_deployment_license_path:

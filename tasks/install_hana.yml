@@ -1,6 +1,6 @@
 ---
 
-- name: Check if file 'hdblcm' is in {{ sap_hana_installdir }}
+- name: Check if file 'hdblcm' is in '{{ sap_hana_installdir }}'
   stat:
     path: "{{ sap_hana_installdir + '/hdblcm' }}"
   register: sap_hana_deployment_register_hdblcm_stat

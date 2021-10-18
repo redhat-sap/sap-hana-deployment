@@ -79,7 +79,7 @@ a user and group ID is chosen according to certain rules.
 |sap_hana_deployment_directories_permissions| Permissions for /hana/shared, /hana/data, /hana/log, and /usr/sap. | Yes|
 |sap_hana_deployment_set_permissions| Set or verify permissions for /hana/shared, /hana/data, /hana/log, and /usr/sap. If set to `yes`, permissions will be set. If set to `no`, permissions will be verified and the role will abort if one of the permissions is not set correctly. | Yes. Default is `no`.|
 |sap_hana_installdir|SAP HANA directory in which hdblcm is located |No, if the location of a SAP HANA installation bundle file is specified using one of the variables below|
-|sap_hana_deployment_hana_extract_path|Directory path on the managed node to where the SAP HANA installation bundle SAR or ZIP file is to be extracted|yes, if `sap_hana_installdir` is not defined|
+|sap_hana_deployment_hana_extraction_path|Directory path on the managed node to where the SAP HANA installation bundle SAR or ZIP file is to be extracted|yes, if `sap_hana_installdir` is not defined|
 |sap_hana_deployment_bundle_path_mn|Directory path on the managed node where the SAP HANA installation bundle SAR or ZIP file is located|yes, if `sap_hana_installdir` is not defined|
 |sap_hana_deployment_bundle_file_name|File name of the SAP HANA installation bundle SAR or ZIP file|yes, if `sap_hana_installdir` is not defined|
 |sap_hana_deployment_sapcar_file_name|File name of the SAPCAR executable|yes, if `sap_hana_installdir` is not defined and if the HANA installation bundle file type is "SAR"|
@@ -126,25 +126,21 @@ a user and group ID is chosen according to certain rules.
 |sap_hana_deployment_xs_components_nostart|Do not start the selected XS Advanced components after installation|Only if `sap_hana_deployment_xs_install` is `y`, defaulted to `none`|
 |sap_hana_deployment_lss_user|Local Secure Store User ID|no|
 |sap_hana_deployment_lss_group|Local Secure Store User Group ID|no|
-|sap_hana_deployment_apply_license|Whether to apply a License File to the deployed HANA instance|no, defaulted to 'false'|
-|sap_hana_deployment_license_path|Target host directory path where HANA license file located|no, required if `sap_hana_deployment_apply_license` true|
-|sap_hana_deployment_license_file_name|HANA license file name|no, required if `sap_hana_deployment_apply_license` true|
+|sap_hana_deployment_apply_license_only|Whether to apply a license file only|no, defaulted to 'false'|
+|sap_hana_deployment_apply_license|Whether to apply a license file after the SAP HANA installation|no, defaulted to 'false'|
+|sap_hana_deployment_license_path|directory path on the managed node where the HANA DB license file located|no, required only if `sap_hana_deployment_apply_license` true|
+|sap_hana_deployment_license_file_name|HANA DB license file name|no, required only if `sap_hana_deployment_apply_license` true|
 
-## HANA Deploy and HANA Lincese
+## HANA Deployment and HANA License
 
-While using this role 2 different scenarios can be covered. These are SAP HANA deployment in a new RHEL Server and set the HANA DB License in an existing deployment.
-
-In order the role to run the first scenario, SAP HANA deployment in a new RHEL Server, the variable `sap_hana_deployment_apply_license` must be `false`.
-
-In order the role to run the second scenario, set the HANA DB License in an existing deployment, the variable `sap_hana_deployment_apply_license` must be `true`.
-
-Variables required for both scenarios are the ones specified already.
+The role supports two different scenarios: SAP HANA deployment in a RHEL system, with or without applying a SAP HANA DB license,
+and applying a SAP HANA DB license in an existing deployment only.
 
 ## Dependencies
 
-Before using this role ensure your system has been configured properly to run SAP applications and HANA.
+Before using this role, ensure that your system has been configured properly to run SAP applications and SAP HANA.
 
-You can use the supported roles `sap-preconfigure` and `sap-hana-preconfigure` comming with RHEL 7 and 8 with RHEL for SAP Solutions Subscription
+You can use the supported roles `sap-preconfigure` and `sap-hana-preconfigure` on RHEL 8 control nodes, which are part of the RHEL for SAP Solutions Subscription.
 
 The upstream version of these role can be found [here](https://github.com/linux-system-roles/sap-preconfigure) and [here](https://github.com/linux-system-roles/sap-hana-preconfigure)
 

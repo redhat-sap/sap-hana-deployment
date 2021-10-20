@@ -82,11 +82,11 @@ a user and group ID is chosen according to certain rules.
 |sap_hana_deployment_set_permissions| Set or verify permissions for /hana/shared, /hana/data, /hana/log, and /usr/sap. If set to `yes`, permissions will be set. If set to `no`, permissions will be verified and the role will abort if one of the permissions is not set correctly. | Yes. Default is `no`.|
 |sap_hana_installdir|SAP HANA directory in which hdblcm is located |No, if the location of a SAP HANA installation bundle file is specified using one of the variables below|
 |sap_hana_deployment_hana_extraction_path|Directory path on the managed node to where the SAP HANA installation bundle SAR or ZIP file is to be extracted|yes, if `sap_hana_installdir` is not defined|
-|sap_hana_deployment_bundle_path_mn|Directory path on the managed node where the SAP HANA installation bundle SAR or ZIP file is located|yes, if `sap_hana_installdir` is not defined|
+|sap_hana_deployment_bundle_is_on_managed_node|Define if the SAP HANA installation bundle file is available on the managed node|yes, if `sap_hana_installdir` is not defined|
 |sap_hana_deployment_bundle_file_name|File name of the SAP HANA installation bundle SAR or ZIP file|yes, if `sap_hana_installdir` is not defined|
+|sap_hana_deployment_bundle_path_mn|Directory path on the managed node where the SAP HANA installation bundle SAR or ZIP file is located|yes, if `sap_hana_installdir` is not defined|
 |sap_hana_deployment_sapcar_file_name|File name of the SAPCAR executable|yes, if `sap_hana_installdir` is not defined and if the HANA installation bundle file type is "SAR"|
 |sap_hana_deployment_sapcar_path_mn|Directory path of the SAPCAR executable on the managed node|yes, if `sap_hana_installdir` is not defined and if the HANA installation bundle file type is "SAR"|
-|sap_hana_deployment_bundle_is_on_managed_node|Define if the SAP HANA installation bundle file is available on the managed node|yes, if `sap_hana_installdir` is not defined|
 |sap_hana_deployment_bundle_is_on_control_node|Define if the SAP HANA installation bundle file is available on the control node|yes, if `sap_hana_installdir` is not defined|
 |sap_hana_deployment_bundle_path_cn|Directory path on the control node where the SAP HANA installation bundle SAR or ZIP file is located|yes, if `sap_hana_installdir` is not defined and if sap_hana_deployment_bundle_is_on_control_node is set to `yes`|
 |sap_hana_deployment_sapcar_path_cn|Directory path on the control node where the SAPCAR executable is located|yes, if `sap_hana_installdir` is not defined and if sap_hana_deployment_bundle_is_on_control_node is set to `yes` and if the HANA installation bundle file type is "SAR" |
@@ -158,20 +158,23 @@ The upstream version of these role can be found [here](https://github.com/linux-
 ## Example Inventory
 
 ```yaml
-sap_hana_deployment_bundle_path: /usr/local/src
-sap_hana_deployment_bundle_sar_file_name: IMDB_SERVER20_045_0-80002031.SAR
-sap_hana_deployment_sapcar_path: /usr/local/src
-sap_hana_deployment_sapcar_file_name: SAPCAR_1311-80000935.EXE
-sap_hana_deployment_root_password: "mysecretpassword"
-sap_hana_deployment_sapadm_password: "mysecretpassword"
+sap_hana_deployment_bundle_is_on_managed_node: yes
+sap_hana_deployment_bundle_path_mn: /data/sap-download
+sap_hana_deployment_bundle_file_name: IMDB_SERVER20_045_0-80002031.SAR
+sap_hana_deployment_sapcar_path_mn: /usr/local/bin
+sap_hana_deployment_sapcar_file_name: SAPCAR_1211-80000935.EXE
+sap_hana_deployment_hana_extraction_path: /data/sap-install
+sap_hana_deployment_root_password: "R3dh4t123"
+sap_hana_deployment_sapadm_password: "R3dh4t123"
+sap_hana_deployment_sidadm_password: "R3dh4t123"
 sap_hana_deployment_hana_sid: RHE
 sap_hana_deployment_hana_instance_number: "01"
 sap_hana_deployment_hana_env_type: development
 sap_hana_deployment_hana_mem_restrict: 'n'
-sap_hana_deployment_hana_db_system_password: "mysecretpassword"
-sap_hana_deployment_ase_user_password: "mysecretpassword"
+sap_hana_deployment_hana_db_system_password: "R3dh4t123"
+sap_hana_deployment_ase_user_password: "R3dh4t123"
 sap_hana_deployment_apply_license: true
-sap_hana_deployment_license_path: /usr/local/src
+sap_hana_deployment_license_path: /data/sap-license
 sap_hana_deployment_license_file_name: RHE.txt
 ```
 

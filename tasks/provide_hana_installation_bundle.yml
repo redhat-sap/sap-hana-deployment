@@ -59,6 +59,12 @@
 
 - name: Extract the SAP HANA SAPCAR archive
   block:
+    - name: Create the directory for extracting the SAP HANA installation bundle SAR file
+      file:
+        path: "{{ sap_hana_deployment_hana_extraction_path }}"
+        mode: '0755'
+        state: directory
+
     - name: "Use SAPCAR to extract the SAP HANA installation bundle SAR file"
       command: >-
         {{ sap_hana_deployment_sapcar_path_mn }}/{{ sap_hana_deployment_sapcar_file_name }}
@@ -75,10 +81,16 @@
   when:
     - not(( sap_hana_deployment_bundle_path_mn is none ) or ( sap_hana_deployment_bundle_path_mn | trim == ''))
     - not(( sap_hana_deployment_bundle_file_name is none ) or (sap_hana_deployment_bundle_file_name | trim == ''))
-    - __sap_hana_preconfigure_fact_hana_bundle_file_type == "SAR"
+    - __sap_hana_preconfigure_fact_hana_bundle_file_type == 'SAR'
 
 - name: Extract the SAP HANA ZIP archive
   block:
+    - name: Create the directory for extracting the SAP HANA installation bundle ZIP file
+      file:
+        path: "{{ sap_hana_deployment_hana_extraction_path }}"
+        mode: '0755'
+        state: directory
+
     - name: "Unzip the SAP HANA installation bundle ZIP file"
       unarchive:
         src: "{{ sap_hana_deployment_bundle_path_mn }}/{{ sap_hana_deployment_bundle_file_name }}"
@@ -93,4 +105,4 @@
   when:
     - not(( sap_hana_deployment_bundle_path_mn is none ) or ( sap_hana_deployment_bundle_path_mn | trim == ''))
     - not(( sap_hana_deployment_bundle_file_name is none ) or (sap_hana_deployment_bundle_file_name | trim == ''))
-    - __sap_hana_preconfigure_fact_hana_bundle_file_type == "ZIP"
+    - ((__sap_hana_preconfigure_fact_hana_bundle_file_type == 'ZIP') or (__sap_hana_preconfigure_fact_hana_bundle_file_type == 'zip'))

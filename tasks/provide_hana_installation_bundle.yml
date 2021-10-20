@@ -12,6 +12,12 @@
 
 - name: Copy the necessary SAP files from the control node
   block:
+    - name: Create the directory for storing the SAP HANA installation bundle file
+      file:
+        path: "{{ sap_hana_deployment_bundle_path_mn }}"
+        mode: '0755'
+        state: directory
+
     - name: "cn: Copy the SAP HANA installation bundle file"
       copy:
         src: "{{ sap_hana_deployment_bundle_path_cn }}/{{ sap_hana_deployment_bundle_file_name }}"
@@ -34,6 +40,12 @@
     - name: "tn: Get the remote user name"
       set_fact:
         __sap_hana_deployment_fact_remote_user: "{{ lookup('env', 'USER') }}"
+
+    - name: Create the directory for storing the SAP HANA installation bundle file
+      file:
+        path: "{{ sap_hana_deployment_bundle_path_mn }}"
+        mode: '0755'
+        state: directory
 
     - name: "tn: Copy the SAP HANA installation bundle file"
       command: scp -p {{ sap_hana_deployment_sap_software_remote_location }}/{{ sap_hana_deployment_bundle_file_name }} \
@@ -70,10 +82,10 @@
         {{ sap_hana_deployment_sapcar_path_mn }}/{{ sap_hana_deployment_sapcar_file_name }}
         -xvf {{ sap_hana_deployment_bundle_path_mn }}/{{ sap_hana_deployment_bundle_file_name }}
         -manifest SIGNATURE.SMF
-      register: sap_hana_deployment_register_extractbundle
+      register: __sap_hana_deployment_register_extractbundle
       args:
         chdir: "{{ sap_hana_deployment_hana_extraction_path }}"
-      changed_when: "'SAPCAR: processing archive' in sap_hana_deployment_register_extractbundle.stdout"
+      changed_when: "'SAPCAR: processing archive' in __sap_hana_deployment_register_extractbundle.stdout"
 
     - name: "SAR file: Set fact for the SAP HANA installer path"
       set_fact:
@@ -97,7 +109,7 @@
         dest: "{{ sap_hana_deployment_hana_extraction_path }}"
         remote_src: yes
         mode: '0755'
-      register: sap_hana_deployment_register_extractzip
+      register: __sap_hana_deployment_register_extractzip
 
     - name: "ZIP file: Set fact for the SAP HANA installer path"
       set_fact:

@@ -67,12 +67,15 @@ a user and group ID is chosen according to certain rules.
       or on a third node, if these files are available on the control node or on a third node.
 
 #### 3\. Run the SAP HANA installation
-  Once the SAP HANA installation files are available on the managed node, the installation on the is started on the managed node.
-  By specifying a valid argument to variable sap_hana_deployment_addhosts, a SAP HANA scale-out installation is performed on the
-  additional hosts.
+  Once the SAP HANA installation files are available on the managed node, the installation is started on the managed node.
+  By specifying a valid argument to variable `sap_hana_deployment_addhosts`, one or more SAP HANA hosts are added after the installation
+  on the first node has completed, meaning that the role will create a SAP HANA scale-out system.
+  If the variable `sap_hana_deployment_install_primary` is set to the value `n`, then instead of installing a fresh SAP HANA system,
+  additional hosts are added to an existing SAP HANA installation instead, using the argument to variable
+  `sap_hana_deployment_addhosts`.
 
 #### 4\. Apply the SAP HANA license
-  After the SAP HANA installation has completed, the SAP HANA license can be applied.
+  After a fresh SAP HANA installation has completed, the SAP HANA license can be applied.
 
 ## Role Variables
 
@@ -80,7 +83,8 @@ a user and group ID is chosen according to certain rules.
 |:--------:|:----------------------------:|:---------:|
 |sap_hana_deployment_directories_permissions| Permissions for /hana/shared, /hana/data, /hana/log, and /usr/sap. | Yes|
 |sap_hana_deployment_set_permissions| Set or verify permissions for /hana/shared, /hana/data, /hana/log, and /usr/sap. If set to `yes`, permissions will be set. If set to `no`, permissions will be verified and the role will abort if one of the permissions is not set correctly. | Yes. Default is `no`.|
-|sap_hana_installdir|SAP HANA directory in which hdblcm is located |No, if the location of a SAP HANA installation bundle file is specified using one of the variables below|
+|sap_hana_deployment_install_primary|Whether you want to perform a fresh SAP HANA installation or add more hosts to an existing SAP HANA installation. The default is `y`.|yes|
+|sap_hana_installdir|SAP HANA directory in which hdblcm is located |No, if the location of a SAP HANA installation bundle file is specified using some of the variables below|
 |sap_hana_deployment_hana_extraction_path|Directory path on the managed node to where the SAP HANA installation bundle SAR or ZIP file is to be extracted|yes, if `sap_hana_installdir` is not defined|
 |sap_hana_deployment_bundle_is_on_managed_node|Define if the SAP HANA installation bundle file is available on the managed node|yes, if `sap_hana_installdir` is not defined|
 |sap_hana_deployment_bundle_file_name|File name of the SAP HANA installation bundle SAR or ZIP file|yes, if `sap_hana_installdir` is not defined|
@@ -115,7 +119,7 @@ a user and group ID is chosen according to certain rules.
 |sap_hana_deployment_system_restart|Restart system after machine reboot|no, defaulted to `n`|
 |sap_hana_deployment_create_initial_tenant|Create an initial tenant with the SAP HANA installation|yes, defaulted to `y`|
 |sap_hana_deployment_hostname|Hostname for the installation (e.g.if a virtual name is to be used)|yes, defaulted to the physical hostname|
-|sap_hana_deployment_addhosts|a valid 'hostname:role=...,hostname:role=...' string as per SAP HANA Server Installation and Updated Guide. Example: 'host02:role=worker:workergroup=wg01:group=g01,host03:role=worker'|Only for HANA scale-out installation|
+|sap_hana_deployment_addhosts|a valid 'hostname:role=...,hostname:role=...' string as per SAP HANA Server Installation and Updated Guide. Example: 'host02:role=worker:workergroup=wg01:group=g01,host03:role=worker'|Only for HANA scale-out installation or for adding additional hosts to an existing HANA installation|
 |sap_hana_deployment_xs_install|Install XS Advanced in the default tenant database|no, defaulted to `n`|
 |sap_hana_deployment_xs_path|XS Advanced App Working Path|Only if `sap_hana_deployment_xs_install` is `y`|
 |sap_hana_deployment_xs_orgname|Organization Name For Space "SAP"|Only if `sap_hana_deployment_xs_install` is `y`, defaulted to `orgname`|
@@ -155,7 +159,7 @@ The upstream version of these role can be found [here](https://github.com/linux-
       - role: sap-hana-deployment
 ```
 
-## Example Inventory
+## Example Inventory for an initial SAP HANA installation
 
 ```yaml
 sap_hana_deployment_bundle_is_on_managed_node: yes
@@ -164,6 +168,7 @@ sap_hana_deployment_bundle_file_name: IMDB_SERVER20_045_0-80002031.SAR
 sap_hana_deployment_sapcar_path_mn: /usr/local/bin
 sap_hana_deployment_sapcar_file_name: SAPCAR_1211-80000935.EXE
 sap_hana_deployment_hana_extraction_path: /data/sap-install
+sap_hana_deployment_hana_install_path: '/hana/shared'
 sap_hana_deployment_root_password: "R3dh4t123"
 sap_hana_deployment_sapadm_password: "R3dh4t123"
 sap_hana_deployment_sidadm_password: "R3dh4t123"
@@ -176,6 +181,46 @@ sap_hana_deployment_ase_user_password: "R3dh4t123"
 sap_hana_deployment_apply_license: true
 sap_hana_deployment_license_path: /data/sap-license
 sap_hana_deployment_license_file_name: RHE.txt
+```
+
+## Example Inventory for an initial SAP HANA scale-out installation
+
+```yaml
+sap_hana_deployment_bundle_is_on_managed_node: yes
+sap_hana_deployment_bundle_path_mn: /data/sap-download
+sap_hana_deployment_bundle_file_name: IMDB_SERVER20_045_0-80002031.SAR
+sap_hana_deployment_sapcar_path_mn: /usr/local/bin
+sap_hana_deployment_sapcar_file_name: SAPCAR_1211-80000935.EXE
+sap_hana_deployment_hana_extraction_path: /data/sap-install
+sap_hana_deployment_hana_install_path: '/hana/shared'
+sap_hana_deployment_root_password: "R3dh4t123"
+sap_hana_deployment_sapadm_password: "R3dh4t123"
+sap_hana_deployment_sidadm_password: "R3dh4t123"
+sap_hana_deployment_hana_sid: RHE
+sap_hana_deployment_hana_instance_number: "01"
+sap_hana_deployment_hana_env_type: development
+sap_hana_deployment_hana_mem_restrict: 'n'
+sap_hana_deployment_hana_db_system_password: "R3dh4t123"
+sap_hana_deployment_ase_user_password: "R3dh4t123"
+sap_hana_deployment_addhosts: 'host02:role=worker:workergroup=wg01:group=g01,host03:role=worker'
+sap_hana_deployment_apply_license: true
+sap_hana_deployment_license_path: /data/sap-license
+sap_hana_deployment_license_file_name: RHE.txt
+```
+
+## Example Inventory for adding a new host to an existing SAP HANA installation
+
+```yaml
+sap_hana_deployment_install_primary: no
+sap_hana_deployment_hana_install_path: '/hana/shared'
+sap_hana_deployment_root_password: "R3dh4t123"
+sap_hana_deployment_sapadm_password: "R3dh4t123"
+sap_hana_deployment_sidadm_password: "R3dh4t123"
+sap_hana_deployment_hana_sid: RHE
+sap_hana_deployment_hana_instance_number: "01"
+sap_hana_deployment_hana_db_system_password: "R3dh4t123"
+sap_hana_deployment_addhosts: 'host04:role=standby'
+sap_hana_deployment_install_primary: no
 ```
 
 ## License

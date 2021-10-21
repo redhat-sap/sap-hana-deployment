@@ -4,7 +4,7 @@
   file:
     path: "{{ line_item.name }}"
     state: directory
-    mode: "{{ line_item.value }}"
+    mode: "{{ line_item.mode }}"
   with_items: "{{ sap_hana_deployment_directories_permissions }}"
   loop_control:
     loop_var: line_item

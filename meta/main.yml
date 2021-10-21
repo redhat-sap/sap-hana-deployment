@@ -1,12 +1,11 @@
 galaxy_info:
   author: Red Hat SAP Community of Practice
-  description: Deploys `SAP HANA` on the given host(s)
+  description: Deploys SAP HANA
+  company: Red Hat, Inc.
   license: Apache
-  min_ansible_version: 2.5
+  min_ansible_version: 2.7
   platforms:
   - name: EL
     versions: [ 7, 8 ]
-
-  galaxy_tags: [ 'hana', 'rhel', 'sap' ]
-
+  galaxy_tags: [ 'sap', 'hana', 'rhel' ]
 dependencies: []

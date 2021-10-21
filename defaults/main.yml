@@ -3,10 +3,10 @@
 
 # Directories and their permissions to set or verify
 sap_hana_deployment_directories_permissions:
-  - { name: /hana/shared, value: '0755' }
-  - { name: /hana/data, value: '0755' }
-  - { name: /hana/log, value: '0755' }
-  - { name: /usr/sap, value: '0755' }
+  - { name: /hana/shared, mode: '0755' }
+  - { name: /hana/data, mode: '0755' }
+  - { name: /hana/log, mode: '0755' }
+  - { name: /usr/sap, mode: '0755' }
 
 # If the following variable is set to 'yes', set permissions of
 # the directories in sap_hana_deployment_directories_permissions to the specified values.

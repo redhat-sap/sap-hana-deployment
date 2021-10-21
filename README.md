@@ -70,6 +70,7 @@ a user and group ID is chosen according to certain rules.
   Once the SAP HANA installation files are available on the managed node, the installation is started on the managed node.
   By specifying a valid argument to variable `sap_hana_deployment_addhosts`, one or more SAP HANA hosts are added after the installation
   on the first node has completed, meaning that the role will create a SAP HANA scale-out system.
+
   If the variable `sap_hana_deployment_install_primary` is set to the value `n`, then instead of installing a fresh SAP HANA system,
   additional hosts are added to an existing SAP HANA installation instead, using the argument to variable
   `sap_hana_deployment_addhosts`.
@@ -159,15 +160,10 @@ The upstream version of these role can be found [here](https://github.com/linux-
       - role: sap-hana-deployment
 ```
 
-## Example Inventory for an initial SAP HANA installation
+## Example Inventory for an initial SAP HANA installation - HANA software is already extracted on the managed node
 
 ```yaml
-sap_hana_deployment_bundle_is_on_managed_node: yes
-sap_hana_deployment_bundle_path_mn: /data/sap-download
-sap_hana_deployment_bundle_file_name: IMDB_SERVER20_045_0-80002031.SAR
-sap_hana_deployment_sapcar_path_mn: /usr/local/bin
-sap_hana_deployment_sapcar_file_name: SAPCAR_1211-80000935.EXE
-sap_hana_deployment_hana_extraction_path: /data/sap-install
+sap_hana_installdir: /data/sap-install/SAP_HANA_DATABASE
 sap_hana_deployment_hana_install_path: '/hana/shared'
 sap_hana_deployment_root_password: "R3dh4t123"
 sap_hana_deployment_sapadm_password: "R3dh4t123"
@@ -183,13 +179,16 @@ sap_hana_deployment_license_path: /data/sap-license
 sap_hana_deployment_license_file_name: RHE.txt
 ```
 
-## Example Inventory for an initial SAP HANA scale-out installation
+## Example Inventory for an initial SAP HANA scale-out installation - HANA software SAR file is available on the control node
 
 ```yaml
-sap_hana_deployment_bundle_is_on_managed_node: yes
+sap_hana_deployment_bundle_is_on_managed_node: no
+sap_hana_deployment_bundle_is_on_control_node: yes
 sap_hana_deployment_bundle_path_mn: /data/sap-download
+sap_hana_deployment_bundle_path_cn: /data/sap-download
 sap_hana_deployment_bundle_file_name: IMDB_SERVER20_045_0-80002031.SAR
 sap_hana_deployment_sapcar_path_mn: /usr/local/bin
+sap_hana_deployment_sapcar_path_cn: /data/sap-download
 sap_hana_deployment_sapcar_file_name: SAPCAR_1211-80000935.EXE
 sap_hana_deployment_hana_extraction_path: /data/sap-install
 sap_hana_deployment_hana_install_path: '/hana/shared'
@@ -220,7 +219,6 @@ sap_hana_deployment_hana_sid: RHE
 sap_hana_deployment_hana_instance_number: "01"
 sap_hana_deployment_hana_db_system_password: "R3dh4t123"
 sap_hana_deployment_addhosts: 'host04:role=standby'
-sap_hana_deployment_install_primary: no
 ```
 
 ## License

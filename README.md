@@ -1,3 +1,9 @@
+# THIS ROLE IS DEPRECATED AND NO LONGER DEVELOPED
+
+The successor is now developed as part of the [community.sap_install](https://github.com/sap-linuxlab/community.sap_install) collection.
+
+The new name is community.sap_install.sap_hana_install
+
 # sap-hana-deployment ![Ansible Lint](https://github.com/redhat-sap/sap-hana-deployment/workflows/Ansible%20Lint/badge.svg?branch=master) ![Ansible Galaxy Import](https://github.com/redhat-sap/sap-hana-deployment/workflows/Ansible%20Galaxy%20Import/badge.svg?branch=master)
 
 This role installs SAP HANA on a RHEL 7.x or 8.x system and applies a permament HANA License.

@@ -1,0 +1,120 @@
+---
+
+- name: Determine SAP HANA bundle file type
+  set_fact:
+    __sap_hana_preconfigure_fact_hana_bundle_file_type: '{{ sap_hana_deployment_bundle_file_name.split(".")[-1] }}'
+  when: (( sap_hana_installdir is none ) or ( sap_hana_installdir | trim == ''))
+
+- name: Show SAP HANA bundle file type
+  debug:
+    var: __sap_hana_preconfigure_fact_hana_bundle_file_type
+  when: (( sap_hana_installdir is none ) or ( sap_hana_installdir | trim == ''))
+
+- name: Copy the necessary SAP files from the control node
+  block:
+    - name: Create the directory for storing the SAP HANA installation bundle file
+      file:
+        path: "{{ sap_hana_deployment_bundle_path_mn }}"
+        mode: '0755'
+        state: directory
+
+    - name: "cn: Copy the SAP HANA installation bundle file"
+      copy:
+        src: "{{ sap_hana_deployment_bundle_path_cn }}/{{ sap_hana_deployment_bundle_file_name }}"
+        dest: "{{ sap_hana_deployment_bundle_path_mn }}/"
+        mode: '0644'
+
+    - name: "cn: If the SAP HANA installation bundle file is a SAR file, copy SAPCAR and set permissions to '0755'"
+      copy:
+        src: "{{ sap_hana_deployment_sapcar_path_cn }}/{{ sap_hana_deployment_sapcar_file_name }}"
+        dest: "{{ sap_hana_deployment_sapcar_path_mn }}/"
+        mode: '0755'
+      when: __sap_hana_preconfigure_fact_hana_bundle_file_type == "SAR"
+
+  when:
+    - sap_hana_deployment_bundle_is_on_control_node
+    - not sap_hana_deployment_bundle_is_on_managed_node
+
+- name: Copy the necessary SAP files from a third node
+  block:
+    - name: "tn: Get the remote user name"
+      set_fact:
+        __sap_hana_deployment_fact_remote_user: "{{ lookup('env', 'USER') }}"
+
+    - name: Create the directory for storing the SAP HANA installation bundle file
+      file:
+        path: "{{ sap_hana_deployment_bundle_path_mn }}"
+        mode: '0755'
+        state: directory
+
+    - name: "tn: Copy the SAP HANA installation bundle file"
+      command: scp -p {{ sap_hana_deployment_sap_software_remote_location }}/{{ sap_hana_deployment_bundle_file_name }} \
+        {{ __sap_hana_deployment_fact_remote_user }}@{{ inventory_hostname }}:{{ sap_hana_deployment_bundle_path_mn }}/
+      delegate_to: localhost
+
+    - name: "tn: In case the SAP HANA installation bundle file is a SAR file, copy SAPCAR"
+      command: scp -p {{ sap_hana_deployment_sap_software_remote_location }}/{{ sap_hana_deployment_sapcar_file_name }} \
+        {{ __sap_hana_deployment_fact_remote_user }}@{{ inventory_hostname }}:{{ sap_hana_deployment_sapcar_path_mn }}/
+      delegate_to: localhost
+      when: __sap_hana_preconfigure_fact_hana_bundle_file_type == "SAR"
+
+    - name: "tn: In case the SAP HANA installation bundle file is a SAR file, set the permission of SAPCAR to '0755'"
+      file:
+        path: "{{ sap_hana_deployment_sapcar_path_mn }}/{{ sap_hana_deployment_sapcar_file_name }}"
+        mode: '0755'
+      when: __sap_hana_preconfigure_fact_hana_bundle_file_type == "SAR"
+
+  when:
+    - not sap_hana_deployment_bundle_is_on_control_node
+    - not sap_hana_deployment_bundle_is_on_managed_node
+    - (( sap_hana_installdir is none ) or ( sap_hana_installdir | trim == ''))
+
+- name: Extract the SAP HANA SAPCAR archive
+  block:
+    - name: Create the directory for extracting the SAP HANA installation bundle SAR file
+      file:
+        path: "{{ sap_hana_deployment_hana_extraction_path }}"
+        mode: '0755'
+        state: directory
+
+    - name: "Use SAPCAR to extract the SAP HANA installation bundle SAR file"
+      command: >-
+        {{ sap_hana_deployment_sapcar_path_mn }}/{{ sap_hana_deployment_sapcar_file_name }}
+        -xvf {{ sap_hana_deployment_bundle_path_mn }}/{{ sap_hana_deployment_bundle_file_name }}
+        -manifest SIGNATURE.SMF
+      register: __sap_hana_deployment_register_extractbundle
+      args:
+        chdir: "{{ sap_hana_deployment_hana_extraction_path }}"
+      changed_when: "'SAPCAR: processing archive' in __sap_hana_deployment_register_extractbundle.stdout"
+
+    - name: "SAR file: Set fact for the SAP HANA installer path"
+      set_fact:
+        sap_hana_installdir: "{{ sap_hana_deployment_hana_extraction_path }}/SAP_HANA_DATABASE"
+  when:
+    - not(( sap_hana_deployment_bundle_path_mn is none ) or ( sap_hana_deployment_bundle_path_mn | trim == ''))
+    - not(( sap_hana_deployment_bundle_file_name is none ) or (sap_hana_deployment_bundle_file_name | trim == ''))
+    - __sap_hana_preconfigure_fact_hana_bundle_file_type == 'SAR'
+
+- name: Extract the SAP HANA ZIP archive
+  block:
+    - name: Create the directory for extracting the SAP HANA installation bundle ZIP file
+      file:
+        path: "{{ sap_hana_deployment_hana_extraction_path }}"
+        mode: '0755'
+        state: directory
+
+    - name: "Unzip the SAP HANA installation bundle ZIP file"
+      unarchive:
+        src: "{{ sap_hana_deployment_bundle_path_mn }}/{{ sap_hana_deployment_bundle_file_name }}"
+        dest: "{{ sap_hana_deployment_hana_extraction_path }}"
+        remote_src: yes
+        mode: '0755'
+      register: __sap_hana_deployment_register_extractzip
+
+    - name: "ZIP file: Set fact for the SAP HANA installer path"
+      set_fact:
+        sap_hana_installdir: "{{ sap_hana_deployment_hana_extraction_path }}/DATA_UNITS/HDB_SERVER_LINUX_{{ ansible_architecture|upper }}"
+  when:
+    - not(( sap_hana_deployment_bundle_path_mn is none ) or ( sap_hana_deployment_bundle_path_mn | trim == ''))
+    - not(( sap_hana_deployment_bundle_file_name is none ) or (sap_hana_deployment_bundle_file_name | trim == ''))
+    - ((__sap_hana_preconfigure_fact_hana_bundle_file_type == 'ZIP') or (__sap_hana_preconfigure_fact_hana_bundle_file_type == 'zip'))

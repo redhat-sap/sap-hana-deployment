@@ -1,22 +1,69 @@
 # Global Default variables
 # Adapt to your default settings
 
-# Target host path and file name for the bundle installation file
-sap_hana_deployment_bundle_path:
-sap_hana_deployment_bundle_sar_file_name:
+# Directories and their permissions to set or verify
+sap_hana_deployment_directories_permissions:
+  - { name: /hana/shared, mode: '0755' }
+  - { name: /hana/data, mode: '0755' }
+  - { name: /hana/log, mode: '0755' }
+  - { name: /usr/sap, mode: '0755' }
 
-# Target host path and file name for the zip installation file
-sap_hana_deployment_zip_path:
-sap_hana_deployment_zip_file_name:
+# If the following variable is set to 'yes', set permissions of
+# the directories in sap_hana_deployment_directories_permissions to the specified values.
+# If the variable is set to 'no', verify these permissions. This is the default.
+sap_hana_deployment_set_permissions: no
 
-# Target host path and file name for the sapcar installation file
-sap_hana_deployment_sapcar_path:
+# If the HANA installation files have already been extracted on the managed node, specify
+# the name of the directory which contains hdblcm here.
+# The role sap-hana-mediacheck can be used to define this variable
+# Example: /hana_install
+sap_hana_installdir:
+
+# Directory of the SAP HANA bundle (.SAR or .ZIP) file on the managed node
+# Example: /sap_download
+sap_hana_deployment_bundle_path_mn:
+
+# File name of the SAP HANA bundle (.SAR or .ZIP) file:
+# Examples: SAP_HANA_DATABASE200_54_Linux_on_x86_64.SAR, 51055101.ZIP
+sap_hana_deployment_bundle_file_name:
+
+# File name of the SAPCAR executable (only needed in case of a SAP HANA bundle SAR file)
+# Example: SAPCAR_1211-80000935.EXE
 sap_hana_deployment_sapcar_file_name:
 
-# if the previous variables are undefined because you do not want to provide a bundle
-# you can define sap_hana_installdir variable, which points to the directory containing hdblcm
-# the role sap-hana-mediacheck can be used to define this variable
-sap_hana_installdir:
+# Directory of the SAPCAR executable on the managed node (only needed in case of a SAP HANA bundle SAR file)
+# Example: /usr/local/bin
+sap_hana_deployment_sapcar_path_mn:
+
+# Are the SAP HANA bundle file (and sapcar) already on the managed node?
+sap_hana_deployment_bundle_is_on_managed_node: no
+
+# Are the SAP HANA bundle file (and sapcar) on the control node?
+sap_hana_deployment_bundle_is_on_control_node: no
+
+# Directory of the SAP HANA bundle (.SAR or .ZIP) file on the control node
+# (only needed in case of sap_hana_deployment_bundle_is_on_control_node)
+# Example: /sap_download
+sap_hana_deployment_bundle_path_cn:
+
+# Directory of the SAPCAR executable on the control node
+# (only needed in case of a SAP HANA bundle SAR file and
+#  only in case of sap_hana_deployment_bundle_is_on_control_node)
+# Example: /sap_download
+sap_hana_deployment_sapcar_path_cn:
+
+# If the SAP HANA bundle file and sapcar are on another node, specify
+# the login user, the host name, and the directory name to be used for the
+# first argument to the scp command
+# Example: root@host01:/sap_download
+sap_hana_deployment_sap_software_remote_location:
+
+# Directory where to extract the SAP HANA bundle (.SAR or .ZIP) file on the managed node
+# Example: /sap_extract
+sap_hana_deployment_hana_extraction_path:
+
+# Apply a SAP HANA DB license only? Default is no.
+sap_hana_deployment_apply_license_only: no
 
 # Target host path and file name for the license file
 sap_hana_deployment_license_path:
@@ -48,6 +95,7 @@ sap_hana_deployment_hana_db_system_password:
 sap_hana_deployment_system_restart: 'n'
 sap_hana_deployment_create_initial_tenant:
 sap_hana_deployment_hostname:
+sap_hana_deployment_addhosts:
 sap_hana_deployment_xs_install: 'n'
 sap_hana_deployment_xs_path:
 sap_hana_deployment_xs_orgname: 'orgname'

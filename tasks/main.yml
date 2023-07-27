@@ -1,20 +1,49 @@
 ---
 
+- name: show sap_hana_deployment_hana_userid
+  debug:
+    var: sap_hana_deployment_hana_userid
+
+- name: show sap_hana_deployment_hana_groupid
+  debug:
+    var: sap_hana_deployment_hana_groupid
+
 - import_tasks: ev_user.yml
   when:
-    - sap_hana_deployment_hana_userid == ''
-    - not sap_hana_deployment_apply_license
+    - ((sap_hana_deployment_hana_userid is undefined) or
+       (sap_hana_deployment_hana_userid is none) or
+       (sap_hana_deployment_hana_userid | trim == '')
+      )
+    - not sap_hana_deployment_apply_license_only
+    - sap_hana_deployment_install_primary|d(true)
 
 - import_tasks: ev_group.yml
   when:
-    - sap_hana_deployment_hana_groupid == ''
-    - not sap_hana_deployment_apply_license
+    - ((sap_hana_deployment_hana_groupid is undefined) or
+       (sap_hana_deployment_hana_groupid is none) or
+       (sap_hana_deployment_hana_groupid | trim == '')
+      )
+    - not sap_hana_deployment_apply_license_only
+    - sap_hana_deployment_install_primary|d(true)
 
 - import_tasks: password_facts.yml
   when: sap_hana_deployment_use_master_password == 'y'
 
-- import_tasks: hana_deploy.yml
-  when: not sap_hana_deployment_apply_license
+- import_tasks: set_or_verify_permissions.yml
+  when:
+    - not sap_hana_deployment_apply_license_only
+    - sap_hana_deployment_install_primary|d(true)
 
-- import_tasks: license.yml
-  when: sap_hana_deployment_apply_license
+- import_tasks: provide_hana_installation_bundle.yml
+  when:
+    - (( sap_hana_installdir is none ) or ( sap_hana_installdir | trim == ''))
+    - not sap_hana_deployment_apply_license_only
+    - sap_hana_deployment_install_primary|d(true)
+
+- import_tasks: install_hana.yml
+  when: not sap_hana_deployment_apply_license_only
+
+- import_tasks: apply_hana_license.yml
+  when:
+    - (sap_hana_deployment_apply_license_only or sap_hana_deployment_apply_license)
+    - sap_hana_deployment_install_primary|d(true)

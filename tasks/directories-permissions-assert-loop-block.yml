@@ -1,0 +1,15 @@
+---
+
+# loop block for hana_deploy.yml
+
+- name: Get permissions of {{ line_item.name }}
+  stat:
+    path: "{{ line_item.name }}"
+  register: __sap_hana_deployment_register_stat
+
+- name: Assert that permissions of {{ line_item.name }} are '{{ line_item.mode }}'
+  assert:
+    that: "__sap_hana_deployment_register_stat.stat.mode == '{{ line_item.mode }}'"
+    fail_msg: "FAIL: Directory {{ line_item.name }} has permissions '{{ __sap_hana_deployment_register_stat.stat.mode }}'
+               but needs to have '{{ line_item.mode }}'!"
+    success_msg: "PASS: Directory {{ line_item.name }} has correct permissions '{{ __sap_hana_deployment_register_stat.stat.mode }}'."
